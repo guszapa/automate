@@ -1,0 +1,13 @@
+.ui-widget { font-size: 0.85em !important; }
+.ui-datepicker td a {
+    font-size: 0.95em !important;
+    padding: 0.3em 0.6em !important;
+}
+.ui-timepicker-div dl dt, .ui-timepicker-div dl dd {
+	padding-right: 8px;
+	display: inline-block;
+	line-height: 25px;
+}
+.ui-timepicker-div dl dt { font-weight: bold; width: 35%; }
+.ui-timepicker-div dl dd { width: 55%; }
+.ui-timepicker-div dl dd select { width: 100%; } 
