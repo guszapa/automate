@@ -27,6 +27,7 @@ class Automate {
        'village_map' => 'media/map',
        'recruit' => 'json/recruit.json'
        );
+   private static $_owner = 'ubuntu';
    private static $_instance;
    private $_config; // automate config
    private $_attacks; // save farm_attacks data
@@ -180,13 +181,14 @@ class Automate {
    }
    public function getBuildingsRules() {
       $filename = ROOT.self::$_paths['buildings'];
-         return is_file($filename) ? file_get_contents($filename) : FALSE;
+      return is_file($filename) ? file_get_contents($filename) : FALSE;
    }
    public function isScheduler() {
       return file_exists(ROOT.self::$_paths['scheduler_flag']);
    }
    public function getProof() {
-      return file_get_contents(ROOT.self::$_paths['proof']);
+      $filename = ROOT.self::$_paths['proof'];
+      return is_file($filename) ? file_get_contents($filename) : FALSE;
    }
 
    /** OK!
@@ -533,7 +535,10 @@ class Automate {
                break;
           }
           fclose($f);
-          chmod($logname,0777);
+          if (!is_writable($logname)) {
+            chown($logname, self::$_owner);
+            chmod($logname,0777);
+          }
       } else {
           echo "<h1>Warning! You don't have permission to write a log file.</h1><h3>Review your permissions</h3>";
           exit();
