@@ -123,6 +123,7 @@ if (count($_attacks) > 0) {
         if ($f) {
             fwrite($f, $proof);
             fclose($f);
+            @chmod(dirname(dirname(__FILE__))."/{$paths['proof']}",0777);
         }
     }
     // Save log at the end
@@ -135,7 +136,7 @@ if (count($_attacks) > 0) {
         if ($f) {
             fwrite($f, "running...");
             fclose($f);
-            chmod(dirname(dirname(__FILE__))."/{$paths['scheduler_flag']}",0777);
+            @chmod(dirname(dirname(__FILE__))."/{$paths['scheduler_flag']}",0777);
         }
     }
 }

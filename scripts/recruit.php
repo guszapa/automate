@@ -37,14 +37,21 @@ function numberRecruit(&$data, &$rules, &$troops, $troop) {
 	if ($troops[$troop] > 0) {
 		$_max = 0;
 		$_material;
+		$_materialCount = 0;
+
+		// search min. material
+		foreach ($data['materials'] as $key => $value) {
+			if ($_materialCount == 0 || $_materialCount > $value) {
+				$_material = $key;
+			}
+		}
+		// Search max. value
 		foreach ($rules['troops'][$troop]['materials'] as $key => $value) {
 			if ($_max == 0) {
 				$_max = $value;
-				$_material = $key;
 			} else {
 				if ($_max < $value) {
 					$_max = $value;
-					$_material = $key;
 				}
 			}
 		}
