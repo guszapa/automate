@@ -1120,6 +1120,10 @@ class Automate {
     }
    }
 
+   public function register ($url) {
+    return $this->_cURL($url);
+   }
+
    /**
     * Create a handle for multiple cURL
     * @param string $url
