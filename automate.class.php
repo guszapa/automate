@@ -1094,6 +1094,10 @@ class Automate {
      }
    }
 
+   public function getGame ($url) {
+    return $this->_cURL($url);
+   }
+
    public function getMessages ($url) {
     return $this->_cURL($url);
    }
