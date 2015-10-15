@@ -5,13 +5,13 @@
  */
 include_once(dirname(__FILE__).'/automate.class.php'); // parent
 $config = Automate::factory()->getConfig();
-$url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php";
+$url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/forum.php";
 $output = '';
 
 print_r($url.'?'.$_SERVER['QUERY_STRING']);
 echo '<br>';
 
-$output = Automate::factory()->getGame($url+'?'+$_SERVER['QUERY_STRING']);
+$output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +25,7 @@ $output = Automate::factory()->getGame($url+'?'+$_SERVER['QUERY_STRING']);
     <?=print_r($output)?>
     <br>
     <h4>
-      <a href="<?=$config['localhost']?>game.php">Back</a>
+      <a href="<?=$config['localhost']?>forum.php">Back</a>
     </h4>
   </body>
 </html>
