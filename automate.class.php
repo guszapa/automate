@@ -663,8 +663,8 @@ class Automate {
                                         foreach($links as $link) {
                                             $user[] = trim($link->nodeValue);
                                         }
-                                        preg_match('/\(\d{3}\|\d{3}\)/', $td->nodeValue, $to); // GET coords
-                                        $_to = explode('|', str_replace(array('(', ')'), array('', ''), $to[0]));
+                                        preg_match_all('/\(\d{3}\|\d{3}\)/', $td->nodeValue, $to); // GET coords
+                                        $_to = explode('|', str_replace(array('(', ')'), array('', ''), $to[0][count($to[0])-1]));
                                         $attacks[$i]['to'] = array ('player' => $user[0], 'colony' => $user[1], 'x' => $_to[0], 'y' => $_to[1]);
                                     }
                                     // Attack FROM (array)
@@ -674,8 +674,8 @@ class Automate {
                                         foreach($links as $link) {
                                             $user[] = trim($link->nodeValue);
                                         }
-                                        preg_match('/\(\d{3}\|\d{3}\)/', $td->nodeValue, $from); // GET coords
-                                        $_from = explode('|', str_replace(array('(', ')'), array('', ''), $from[0]));
+                                        preg_match_all('/\(\d{3}\|\d{3}\)/', $td->nodeValue, $from); // GET coords
+                                        $_from = explode('|', str_replace(array('(', ')'), array('', ''), $from[0][count($from[0])-1]));
                                         $attacks[$i]['from'] = array ('player' => $user[0], 'ally' => $user[1], 'colony' => $user[2], 'x' => $_from[0], 'y' => $_from[1]);
                                     }
                                     // arrived at
