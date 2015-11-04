@@ -78,19 +78,36 @@ if ($_first_village || $_cron) {
             $villages['own'][$village_id]['materials'] = $village_data['materials'];
             $villages['own'][$village_id]['buildings'] = $village_data['buildings'];
             $_troops = explode('|', $village_data['settlement']);
-            $villages['own'][$village_id]['troops'] = array(
-                "farmer" => (int)$_troops[3],
-                "sword" => (int)$_troops[4],
-                "spear" => (int)$_troops[5],
-                "axe" => (int)$_troops[6],
-                "bow" => (int)$_troops[7],
-                "spy" => (int)$_troops[8],
-                "light" => (int)$_troops[9],
-                "heavy" => (int)$_troops[10],
-                "ram" => (int)$_troops[11],
-                "kata" => (int)$_troops[12],
-                "snob" => (int)$_troops[13]
-            );
+
+            if (count($_troops) > 17) {
+                $villages['own'][$village_id]['troops'] = array(
+                    "farmer" => (int)$_troops[6],
+                    "sword" => (int)$_troops[7],
+                    "spear" => (int)$_troops[8],
+                    "axe" => (int)$_troops[9],
+                    "bow" => (int)$_troops[10],
+                    "spy" => (int)$_troops[11],
+                    "light" => (int)$_troops[12],
+                    "heavy" => (int)$_troops[13],
+                    "ram" => (int)$_troops[14],
+                    "kata" => (int)$_troops[15],
+                    "snob" => (int)$_troops[16]
+                );
+            } else {
+                $villages['own'][$village_id]['troops'] = array(
+                    "farmer" => (int)$_troops[5],
+                    "sword" => (int)$_troops[6],
+                    "spear" => (int)$_troops[7],
+                    "axe" => (int)$_troops[8],
+                    "bow" => (int)$_troops[9],
+                    "spy" => (int)$_troops[10],
+                    "light" => (int)$_troops[11],
+                    "heavy" => (int)$_troops[12],
+                    "ram" => (int)$_troops[13],
+                    "kata" => (int)$_troops[14],
+                    "snob" => (int)$_troops[15]
+                );
+            }
         }
         // Get map
         $url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/minimap.php?x={$village['x']}&y={$village['y']}";

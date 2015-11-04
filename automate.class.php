@@ -913,7 +913,7 @@ class Automate {
 					           $_rules = $this->getBuildingsRules();
                     $villages = array();
                     // Village data
-                    $villages['settlement'] = trim(strstr($dom->getElementById('settlement')->nodeValue,')'));
+                    $villages['settlement'] = trim($dom->getElementById('settlement')->nodeValue);
                     // materials
                     $villages['materials'] = array(
                         'stone' => (int)str_replace('.', '', $dom->getElementById('stone')->nodeValue),
