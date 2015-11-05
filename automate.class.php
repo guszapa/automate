@@ -1094,8 +1094,12 @@ class Automate {
      }
    }
 
-   public function getGame ($url) {
-    return $this->_cURL($url);
+   public function getGame ($url, $data) {
+    if (count($data) > 0) {
+      return $this->_cURL($url, $data);
+    } else {
+      return $this->_cURL($url);
+    }
    }
 
    public function getMessages ($url) {
