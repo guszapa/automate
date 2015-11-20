@@ -1234,7 +1234,7 @@ class Automate {
       }
       if ( !is_null($data) && !empty($data)) {
          curl_setopt($curl, CURLOPT_POST, TRUE); // Send a post request
-         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+         curl_setopt($curl, CURLOPT_POSTFIELDS, urldecode(http_build_query($data)));
       } else {
          curl_setopt($curl, CURLOPT_HTTPGET, TRUE);
       }

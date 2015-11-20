@@ -7,7 +7,7 @@
 	"speed_troops": 1,
     "player": "nombre_jugador",
 	"user_id": 1111,
-    "headers": ["Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Charset:ISO-8859-1,utf-8;q=0.7,*;q=0.3","Accept-Language:es-ES,es;q=0.8","Cache-Control:max-age=0","Connection:keep-alive"],
+    "headers": ["Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Charset:ISO-8859-1,utf-8;q=0.7,*;q=0.3","Content-type:multipart/form-data","Accept-Language:es-ES,es;q=0.8","Cache-Control:max-age=0","Connection:keep-alive"],
     "useragent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/37.0",
     "cookie": "game_user=nombre_jugador; game_pass=contraseña_MD5",
     "cookie_file": "cookies.txt",
