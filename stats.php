@@ -69,13 +69,15 @@ if (is_array($all_tracking) && count($all_tracking) > 0) {
 	$sum_points = 0;
 	foreach($all_tracking as $user_id => $stats) {
 		$_history = Automate::factory()->getTrackingHistory($user_id, $_week, $_year);
-		foreach ($_history as $_track) {
-			$_temp_points = 0;
-			foreach($_track as $unixtime => $values) {
-				$_temp_points += (int)$values['total_points'];
+		if ($_history) {
+			foreach ($_history as $_track) {
+				$_temp_points = 0;
+				foreach($_track as $unixtime => $values) {
+					$_temp_points += (int)$values['total_points'];
+				}
 			}
+			$sum_points += $_temp_points;
 		}
-		$sum_points += $_temp_points;
 	}
 	array_push($pie_points, array('Others', round((($sum_points-$tracking['total_points'])/$sum_points)*100, 1)));
 	array_push($pie_points, array('name' => $tracking['name'], 'y' => round(($tracking['total_points']/$sum_points)*100, 1), 'sliced' => true, 'selected' => true));
