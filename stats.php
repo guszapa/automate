@@ -117,8 +117,10 @@ if (is_array($all_tracking) && count($all_tracking) > 0) {
 			array_push($pie_ally_troops, array('name' => $user['name'],'y' => round((($user['troops'])/$sum_troops)*100, 1)));
 		}
 	}
-	array_push($pie_troops, array('Others', round((($sum_troops-$own_troops)/$sum_troops)*100, 1)));
-	array_push($pie_troops, array('name' => $tracking['name'], 'y' => round(($own_troops/$sum_troops)*100, 1), 'sliced' => true, 'selected' => true));
+	if ($sum_troops) {
+		array_push($pie_troops, array('Others', round((($sum_troops-$own_troops)/$sum_troops)*100, 1)));
+		array_push($pie_troops, array('name' => $tracking['name'], 'y' => round(($own_troops/$sum_troops)*100, 1), 'sliced' => true, 'selected' => true));
+	}
 	$pie_troops = json_encode($pie_troops);
 	$pie_ally_troops = json_encode($pie_ally_troops);
 }
