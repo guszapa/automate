@@ -79,8 +79,10 @@ if (is_array($all_tracking) && count($all_tracking) > 0) {
 			$sum_points += $_temp_points;
 		}
 	}
-	array_push($pie_points, array('Others', round((($sum_points-$tracking['total_points'])/$sum_points)*100, 1)));
-	array_push($pie_points, array('name' => $tracking['name'], 'y' => round(($tracking['total_points']/$sum_points)*100, 1), 'sliced' => true, 'selected' => true));
+	if ($sum_points) {
+		array_push($pie_points, array('Others', round((($sum_points-$tracking['total_points'])/$sum_points)*100, 1)));
+		array_push($pie_points, array('name' => $tracking['name'], 'y' => round(($tracking['total_points']/$sum_points)*100, 1), 'sliced' => true, 'selected' => true));
+	}
 	$pie_points = json_encode($pie_points);
 	
 	// troop points
@@ -88,22 +90,24 @@ if (is_array($all_tracking) && count($all_tracking) > 0) {
 	$sum_troops = $own_troops = 0;
 	foreach($all_tracking as $user_id => $stats) {
 		$_history = Automate::factory()->getTrackingHistory($user_id, $_week, $_year);
-		foreach ($_history as $_track) {
-			$_temp_troops = 0;
-			foreach($_track as $unixtime => $values) {
-				$village_points = 0;
-				$village_conquer = $values['total_villages'] > 1 ? 2500*($values['total_villages']-1) : 0;
-				foreach($values['villages'] as $village) :
-					$village_points += (int)$village['points'];
-				endforeach;
-				if ($id == $user_id) {
-					$own_troops = $values['total_points'] - $village_points - $village_conquer;
+		if ($_history) {
+			foreach ($_history as $_track) {
+				$_temp_troops = 0;
+				foreach($_track as $unixtime => $values) {
+					$village_points = 0;
+					$village_conquer = $values['total_villages'] > 1 ? 2500*($values['total_villages']-1) : 0;
+					foreach($values['villages'] as $village) :
+						$village_points += (int)$village['points'];
+					endforeach;
+					if ($id == $user_id) {
+						$own_troops = $values['total_points'] - $village_points - $village_conquer;
+					}
+					$_temp_troops = $values['total_points'] - $village_points - $village_conquer;
 				}
-				$_temp_troops = $values['total_points'] - $village_points - $village_conquer;
 			}
+			array_push($user_data, array('id' => $user_id, 'name' => $stats['name'], 'troops' =>  $_temp_troops));
+			$sum_troops += $_temp_troops;
 		}
-		array_push($user_data, array('id' => $user_id, 'name' => $stats['name'], 'troops' =>  $_temp_troops));
-		$sum_troops += $_temp_troops;
 	}
 	// details troops
 	foreach($user_data as $user) {
