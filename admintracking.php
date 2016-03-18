@@ -11,6 +11,20 @@ $config = Automate::factory()->getConfig();
 $msg = '';
 $error = false;
 $is_ajax = false;
+
+// Parse tracking data to grouping by alliance
+$trackingParsed = array();
+foreach ($tracking as $key => $value) {
+  $userData = array();
+  // Create a alliance if not exists
+  if (!array_key_exists($value['alliance'], $trackingParsed)) {
+    $trackingParsed[$value['alliance']] = array(); 
+  }
+  // Add info inside their alliance
+  $userData[$key] = $value;
+  $trackingParsed[$value['alliance']] = $userData;
+}
+
 /**
  * Controller
  */
@@ -147,38 +161,6 @@ switch ($action) {
                             <label>Player ID</label>
                             <input type="text" name="id" class="span3" value="<?= (isset($_POST['id'])) ? $_POST['id'] : null;?>"/>
                         </li>
-                        <li>
-                            <label>Player Name</label>
-                            <input type="text" name="name" class="span10" value="<?= (isset($_POST['name'])) ? $_POST['name'] : null;?>"/>
-                        </li>
-                        <li>
-                            <label>Total points</label>
-                            <input type="text" name="total_points" class="span5" value="<?= (isset($_POST['total_points'])) ? $_POST['total_points'] : null;?>"/>
-                        </li>
-                        <li>
-                            <label>Position</label>
-                            <input type="text" name="position" class="span3" value="<?= (isset($_POST['position'])) ? $_POST['position'] : null;?>"/>
-                        </li>
-                        <li>
-                            <label>Villages</label>
-                            <input type="text" name="total_villages" class="span3" value="<?= (isset($_POST['total_villages'])) ? $_POST['total_villages'] : null;?>"/>
-                        </li>
-                        <li>
-                            <label>Average points</label>
-                            <input type="text" name="average_points" class="span3" value="<?= (isset($_POST['average_points'])) ? $_POST['average_points'] : null;?>"/>
-                        </li>
-                        <li>
-                            <label>Combats</label>
-                            <input type="text" name="combats" class="span5" value="<?= (isset($_POST['combats'])) ? $_POST['combats'] : null;?>"/>
-                        </li>
-                        <li>
-                            <label>Defeated opponents</label>
-                            <input type="text" name="defeat_opponents" class="span5" value="<?= (isset($_POST['defeat_opponents'])) ? $_POST['defeat_opponents'] : null;?>"/>
-                        </li>
-                        <li>
-                            <label>Enable tracking</label>
-                            <input type="checkbox" name="enabled" <?=(isset($_POST['checkbox'])) ? "checked" : null;?>/>
-                        </li>
                     </ul>
                     <input type="submit" value="Save"/>
                 </form>
@@ -189,70 +171,82 @@ switch ($action) {
             <div class="header">
               <h1><?=$config['player']?> - Tracking players Administrator <em style="font-size:0.6em">(<?=date('d/m/Y H:i:s')?> | <?=date_default_timezone_get();?>)</em></h1>
             </div>
-                <div class="new">
-                    <a id="a_new_tracking">New tracking</a> <span class="separator"> | </span> <a href="<?=$config['localhost']?>admintracking.php">Refresh</a> <span class="separator"> | </span> <a href="<?=$config['localhost']?>">« Go Back</a>
-                </div>
-                <form action="<?=$config['localhost']?>admintracking.php?action=disabled" method="post">
-                <!-- OWN VILLAGES -->
-                <div class="left" style="margin-right: 10px;">
-                <table class="farms">
-                  <thead>
-                    <tr>
-                      <th class="span1"></th>
-                      <th>Player ID</th>
-                      <th>Player Name</th>
-                      <th>Aliance (position)</th>
-                      <th>Total points</th>
-                      <th>Position</th>
-                      <th>Villages</th>
-                      <th>Average points</th>
-                      <th>Combats</th>
-                      <th>Defeated opponents</th>
-                      <th class="span7">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <? if (is_array($tracking) && count($tracking) > 0) : ?>
-                    <? foreach ($tracking as $player_id => $data) : ?>
-                    		<tr class="<?=$data['enabled'] ? 'enable' : 'disabled'?>">
-                    			<td><input type="checkbox" class="chk" name="select[]" value="<?=$player_id?>"/></td>
-                    			<td>
-                    				<a href="<?=$config['protocol']?>://<?=$config['server']?>.<?=$config['domain']?>/game.php?<?=$config['info_player']?><?=$player_id?>" target="_blank">
-                    					<?=$player_id ?>
-                    				</a>
-                    			</td>
-                    			<td><?=$data['name']?></td>
-                    			<td><?=isset($data['alliance']) ? $data['alliance'] : '------'?></td>
-                    			<td><?=number_format($data['total_points'], 0, ',', '.')?></td>
-                    			<td><?=number_format($data['position'], 0, ',', '.')?></td>
-                    			<td><?=number_format($data['total_villages'], 0, ',', '.')?></td>
-                    			<td><?=number_format($data['average_points'], 0, ',', '.')?></td>
-                    			<td><?=number_format($data['combats'], 0, ',', '.')?></td>
-                    			<td><?=number_format($data['defeat_opponents'], 0, ',', '.')?></td>
-                    			<td>
-                    				<br/>
-                    				<a href="<?=$config['localhost']?>stats.php?player=<?=$player_id?>" class="queue green button">Stats</a>
-                    				<a class="delete-row" data-location="admintracking.php?action=delete&id=<?=$player_id?>"  data-id="<?=$player_id?>">Delete</a>
-                    				<br/><br/>
-                    			</td>
-                    		</tr>
-                    <? endforeach; ?>
-                  <? else : ?>
-                    <tr>
-                        <td colspan="11">You don't have any player tracking.</td>
-                    </tr>
-                  <? endif; ?>
-                  	<tr style="border-top: 1px solid #ccc;">
-                        <td><input id="select-all" type="checkbox"/></td>
-                        <td colspan="10" style="text-align: left;">
-                           <span>Select all</span>
-                           <input type="submit" name="disable" value="Disable"/>
-                           <input type="submit" name="enable" value="Enable"/>
-                        </td>
-                     </tr>
-                  </tbody>
-                </table>
+              <div class="new">
+                  <a id="a_new_tracking">New tracking</a> <span class="separator"> | </span> <a href="<?=$config['localhost']?>admintracking.php">Refresh</a> <span class="separator"> | </span> <a href="<?=$config['localhost']?>">« Go Back</a>
+              </div>
+              <form action="<?=$config['localhost']?>admintracking.php?action=disabled" method="post">
+                <!-- Loop for any alliance -->                
+                <? foreach($trackingParsed as $key => $track) : ?>
+                  <!-- Alliance title -->
+                  <h2>
+                    <? if ($key == '') : ?>
+                      Without alliance
+                    <? else : ?>
+                      <?= $key ?>
+                    <? endif ?>
+                  </h2>
+                  <!-- players stats -->
+                  <div class="left" style="margin-right: 10px;">
+                    <table class="farms">
+                      <thead>
+                        <tr>
+                          <th class="span1"></th>
+                          <th>Player ID</th>
+                          <th>Player Name</th>
+                          <th>Aliance (position)</th>
+                          <th>Total points</th>
+                          <th>Position</th>
+                          <th>Villages</th>
+                          <th>Average points</th>
+                          <th>Combats</th>
+                          <th>Defeated opponents</th>
+                          <th class="span7">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <? if (is_array($track) && count($track) > 0) : ?>
+                          <? foreach ($track as $player_id => $data) : ?>
+                          		<tr class="<?=$data['enabled'] ? 'enable' : 'disabled'?>">
+                          			<td><input type="checkbox" class="chk" name="select[]" value="<?=$player_id?>"/></td>
+                          			<td>
+                          				<a href="<?=$config['protocol']?>://<?=$config['server']?>.<?=$config['domain']?>/game.php?<?=$config['info_player']?><?=$player_id?>" target="_blank">
+                          					<?=$player_id ?>
+                          				</a>
+                          			</td>
+                          			<td><?=$data['name']?></td>
+                          			<td><?=isset($data['alliance']) ? $data['alliance'] : '------'?></td>
+                          			<td><?=number_format($data['total_points'], 0, ',', '.')?></td>
+                          			<td><?=number_format($data['position'], 0, ',', '.')?></td>
+                          			<td><?=number_format($data['total_villages'], 0, ',', '.')?></td>
+                          			<td><?=number_format($data['average_points'], 0, ',', '.')?></td>
+                          			<td><?=number_format($data['combats'], 0, ',', '.')?></td>
+                          			<td><?=number_format($data['defeat_opponents'], 0, ',', '.')?></td>
+                          			<td>
+                          				<br/>
+                          				<a href="<?=$config['localhost']?>stats.php?player=<?=$player_id?>" class="queue green button">Stats</a>
+                          				<a class="delete-row" data-location="admintracking.php?action=delete&id=<?=$player_id?>"  data-id="<?=$player_id?>">Delete</a>
+                          				<br/><br/>
+                          			</td>
+                          		</tr>
+                          <? endforeach; ?>
+                        <? else : ?>
+                          <tr>
+                              <td colspan="11">You don't have any player tracking.</td>
+                          </tr>
+                        <? endif; ?>
+                        	<tr style="border-top: 1px solid #ccc;">
+                              <td><input id="select-all" type="checkbox"/></td>
+                              <td colspan="10" style="text-align: left;">
+                                 <span>Select all</span>
+                                 <input type="submit" name="disable" value="Disable"/>
+                                 <input type="submit" name="enable" value="Enable"/>
+                              </td>
+                           </tr>
+                        </tbody>
+                      </table>
+                    </div>
                 </form>
+              <? endforeach; ?>
             </div>
         </div>
     </body>
