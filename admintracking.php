@@ -178,7 +178,7 @@ switch ($action) {
                 <!-- Loop for any alliance -->                
                 <? foreach($trackingParsed as $key => $track) : ?>
                   <!-- Alliance title -->
-                  <h2>
+                  <h2 class="left" style="width: 100%; margin-top: 16px">
                     <? if ($key == '') : ?>
                       Without alliance
                     <? else : ?>
