@@ -25,6 +25,23 @@ $msg = '';
 $error = false;
 $is_ajax = false;
 $stats = false;
+$userAlliance = preg_replace('/\(.+\)/', '', $tracking['alliance']);
+
+// Parse tracking data to grouping by alliance
+$AlltrackingParsed = array();
+foreach ($all_tracking as $key => $value) {
+  $userData = array();
+  // Remove alliance position
+  $alliance = preg_replace('/\(.+\)/', '', $value['alliance']);
+
+  // Create a alliance if not exists
+  if (!array_key_exists($alliance, $trackingParsed)) {
+    $trackingParsed[$alliance] = array(); 
+  }
+  // Add info inside their alliance
+  $userData[$key] = $value;
+  array_push($trackingParsed[$alliance], $userData);
+}
 
 /** Paginator **/
 $pages = 5;
@@ -62,21 +79,27 @@ for ($i = 0; $i < $pages*2; $i++) {
 /** PROCCESS STATS **/
 // alliance charts
 
-if (is_array($all_tracking) && count($all_tracking) > 0) {
+if (is_array($AlltrackingParsed) && count($AlltrackingParsed) > 0) {
 	
 	// total points
 	$pie_points = array();
 	$sum_points = 0;
-	foreach($all_tracking as $user_id => $stats) {
-		$_history = Automate::factory()->getTrackingHistory($user_id, $_week, $_year);
-		if ($_history) {
-			foreach ($_history as $_track) {
-				$_temp_points = 0;
-				foreach($_track as $unixtime => $values) {
-					$_temp_points += (int)$values['total_points'];
+	foreach($AlltrackingParsed as $alliance => $tracks) {
+		if ($alliance == $userAlliance) {
+			for ($i=0; $i<count($tracks); $i++) {
+				foreach($tracks[$i] as $user_id => $stats) {
+					$_history = Automate::factory()->getTrackingHistory($user_id, $_week, $_year);
+					if ($_history) {
+						foreach ($_history as $_track) {
+							$_temp_points = 0;
+							foreach($_track as $unixtime => $values) {
+								$_temp_points += (int)$values['total_points'];
+							}
+						}
+						$sum_points += $_temp_points;
+					}
 				}
 			}
-			$sum_points += $_temp_points;
 		}
 	}
 	if ($sum_points) {
@@ -88,25 +111,31 @@ if (is_array($all_tracking) && count($all_tracking) > 0) {
 	// troop points
 	$pie_troops = $pie_ally_troops = $user_data = array();
 	$sum_troops = $own_troops = 0;
-	foreach($all_tracking as $user_id => $stats) {
-		$_history = Automate::factory()->getTrackingHistory($user_id, $_week, $_year);
-		if ($_history) {
-			foreach ($_history as $_track) {
-				$_temp_troops = 0;
-				foreach($_track as $unixtime => $values) {
-					$village_points = 0;
-					$village_conquer = $values['total_villages'] > 1 ? 2500*($values['total_villages']-1) : 0;
-					foreach($values['villages'] as $village) :
-						$village_points += (int)$village['points'];
-					endforeach;
-					if ($id == $user_id) {
-						$own_troops = $values['total_points'] - $village_points - $village_conquer;
+	foreach($AlltrackingParsed as $user_id => $tracks) {
+		if ($alliance == $userAlliance) {
+			for ($i=0; $i<count($tracks); $i++) {
+				foreach($tracks[$i] as $user_id => $stats) {
+					$_history = Automate::factory()->getTrackingHistory($user_id, $_week, $_year);
+					if ($_history) {
+						foreach ($_history as $_track) {
+							$_temp_troops = 0;
+							foreach($_track as $unixtime => $values) {
+								$village_points = 0;
+								$village_conquer = $values['total_villages'] > 1 ? 2500*($values['total_villages']-1) : 0;
+								foreach($values['villages'] as $village) :
+									$village_points += (int)$village['points'];
+								endforeach;
+								if ($id == $user_id) {
+									$own_troops = $values['total_points'] - $village_points - $village_conquer;
+								}
+								$_temp_troops = $values['total_points'] - $village_points - $village_conquer;
+							}
+						}
+						array_push($user_data, array('id' => $user_id, 'name' => $stats['name'], 'troops' =>  $_temp_troops));
+						$sum_troops += $_temp_troops;
 					}
-					$_temp_troops = $values['total_points'] - $village_points - $village_conquer;
 				}
 			}
-			array_push($user_data, array('id' => $user_id, 'name' => $stats['name'], 'troops' =>  $_temp_troops));
-			$sum_troops += $_temp_troops;
 		}
 	}
 	// details troops
