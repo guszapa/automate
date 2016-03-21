@@ -37,26 +37,35 @@ if (! empty($_GET)) {
 switch ($action) {
     case 'new-tracking': // OK
         if ( !empty($_POST)) {
-        		foreach($_POST as $label => $value) {
-        			if (empty($value)) {
-        				$msg = $error = "The field <b>{$label}</b> can not be empty";
-        				break 1;
-        			}
-        		}
-            // Save scheduler
-            if ( !$error) {
-            	$tracking[$_POST['id']] = $_POST;
-            	$tracking[$_POST['id']]['enabled'] = isset($_POST['enabled']) ? 1 : 0;
-            	unset($tracking[$_POST['id']]['id']);
-               if ($f = fopen($paths['tracking'], 'w')) {
-                   fwrite($f, json_encode($tracking));
-                   fclose($f);
-                   @chmod($paths['tracking'], 0777);
-                   $msg = "The player tracking has been saved. <a href='{$config['localhost']}admintracking.php'>refresh page</a>";
-               } else {
-                   Automate::factory()->log('E', "You don't have permission to write {$paths['tracking']} file");
-               }
+          // Loop for tracking players
+            $_url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php?{$config['info_player']}{$_POST['id']}";
+            print_r($_url);
+            $_res = @Automate::factory()->tracking($_url, false, true);
+            if (is_array($_res) && count($_res) > 0) {
+                $_res = $_res['villages'];
+                print_r($_res);
             }
+
+        		// foreach($_POST as $label => $value) {
+        		// 	if (empty($value)) {
+        		// 		$msg = $error = "The field <b>{$label}</b> can not be empty";
+        		// 		break 1;
+        		// 	}
+        		// }
+          //   // Save scheduler
+          //   if ( !$error) {
+          //   	$tracking[$_POST['id']] = $_POST;
+          //   	$tracking[$_POST['id']]['enabled'] = isset($_POST['enabled']) ? 1 : 0;
+          //   	unset($tracking[$_POST['id']]['id']);
+          //      if ($f = fopen($paths['tracking'], 'w')) {
+          //          fwrite($f, json_encode($tracking));
+          //          fclose($f);
+          //          @chmod($paths['tracking'], 0777);
+          //          $msg = "The player tracking has been saved. <a href='{$config['localhost']}admintracking.php'>refresh page</a>";
+          //      } else {
+          //          Automate::factory()->log('E', "You don't have permission to write {$paths['tracking']} file");
+          //      }
+          //   }
         }
         break;
     case 'disabled': // OK
