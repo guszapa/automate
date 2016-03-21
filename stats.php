@@ -35,12 +35,12 @@ foreach ($all_tracking as $key => $value) {
   $alliance = preg_replace('/\(.+\)/', '', $value['alliance']);
 
   // Create a alliance if not exists
-  if (!array_key_exists($alliance, $trackingParsed)) {
-    $trackingParsed[$alliance] = array(); 
+  if (!array_key_exists($alliance, $AlltrackingParsed)) {
+    $AlltrackingParsed[$alliance] = array(); 
   }
   // Add info inside their alliance
   $userData[$key] = $value;
-  array_push($trackingParsed[$alliance], $userData);
+  array_push($AlltrackingParsed[$alliance], $userData);
 }
 
 /** Paginator **/
