@@ -37,35 +37,23 @@ if (! empty($_GET)) {
 switch ($action) {
     case 'new-tracking': // OK
         if ( !empty($_POST)) {
-          // Loop for tracking players
+            // Call game to recovery de user data
             $_url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php?{$config['info_player']}{$_POST['id']}";
-            print_r($_url);
             $_res = @Automate::factory()->tracking($_url, false, true);
             if (is_array($_res) && count($_res) > 0) {
-                $_res = $_res['villages'];
-                print_r($_res);
+                $_res['name'] = $_POST['name'];
+                $_res['enabled'] = true;
+                // Save data
+                $tracking[$_POST['id']] = $_res;
+                if ($f = fopen($paths['tracking'], 'w')) {
+                   fwrite($f, json_encode($tracking));
+                   fclose($f);
+                   @chmod($paths['tracking'], 0777);
+                   $msg = "The player tracking has been saved. <a href='{$config['localhost']}admintracking.php'>refresh page</a>";
+               } else {
+                   Automate::factory()->log('E', "You don't have permission to write {$paths['tracking']} file");
+               }
             }
-
-        		// foreach($_POST as $label => $value) {
-        		// 	if (empty($value)) {
-        		// 		$msg = $error = "The field <b>{$label}</b> can not be empty";
-        		// 		break 1;
-        		// 	}
-        		// }
-          //   // Save scheduler
-          //   if ( !$error) {
-          //   	$tracking[$_POST['id']] = $_POST;
-          //   	$tracking[$_POST['id']]['enabled'] = isset($_POST['enabled']) ? 1 : 0;
-          //   	unset($tracking[$_POST['id']]['id']);
-          //      if ($f = fopen($paths['tracking'], 'w')) {
-          //          fwrite($f, json_encode($tracking));
-          //          fclose($f);
-          //          @chmod($paths['tracking'], 0777);
-          //          $msg = "The player tracking has been saved. <a href='{$config['localhost']}admintracking.php'>refresh page</a>";
-          //      } else {
-          //          Automate::factory()->log('E', "You don't have permission to write {$paths['tracking']} file");
-          //      }
-          //   }
         }
         break;
     case 'disabled': // OK
@@ -169,6 +157,8 @@ switch ($action) {
                     		<li>
                             <label>Player ID</label>
                             <input type="text" name="id" class="span3" value="<?= (isset($_POST['id'])) ? $_POST['id'] : null;?>"/>
+                            <label>Player Name</label>
+                            <input type="text" name="name" class="span6" value="<?= (isset($_POST['name'])) ? $_POST['name'] : null;?>"/>
                         </li>
                     </ul>
                     <input type="submit" value="Save"/>
