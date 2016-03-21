@@ -39,7 +39,7 @@ switch ($action) {
         if ( !empty($_POST)) {
             // Call game to recovery de user data
             $_url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php?{$config['info_player']}{$_POST['id']}";
-            $_res = @Automate::factory()->tracking($_url, false, true);
+            $_res = @Automate::factory()->tracking($_url, false, false);
             if (is_array($_res) && count($_res) > 0) {
                 $_res['name'] = $_POST['name'];
                 $_res['enabled'] = true;
