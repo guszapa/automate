@@ -16,13 +16,16 @@ $is_ajax = false;
 $trackingParsed = array();
 foreach ($tracking as $key => $value) {
   $userData = array();
+  // Remove alliance position
+  $alliance = preg_replace('/\(.+\)/', '', $value['alliance']);
+
   // Create a alliance if not exists
-  if (!array_key_exists($value['alliance'], $trackingParsed)) {
-    $trackingParsed[$value['alliance']] = array(); 
+  if (!array_key_exists($alliance, $trackingParsed)) {
+    $trackingParsed[$alliance] = array(); 
   }
   // Add info inside their alliance
   $userData[$key] = $value;
-  $trackingParsed[$value['alliance']] = $userData;
+  array_push($trackingParsed[$_alliance], $userData);
 }
 
 /**
@@ -177,7 +180,7 @@ switch ($action) {
               </div>
               <form action="<?=$config['localhost']?>admintracking.php?action=disabled" method="post">
                 <!-- Loop for any alliance -->                
-                <? foreach($trackingParsed as $key => $track) : ?>
+                <? foreach($trackingParsed as $key => $tracks) : ?>
                   <!-- Alliance title -->
                   <h2 class="left" style="width: 100%; margin-top: 16px">
                     <? if ($key == '') : ?>
@@ -205,30 +208,32 @@ switch ($action) {
                         </tr>
                       </thead>
                       <tbody>
-                        <? if (is_array($track) && count($track) > 0) : ?>
-                          <? foreach ($track as $player_id => $data) : ?>
-                          		<tr class="<?=$data['enabled'] ? 'enable' : 'disabled'?>">
-                          			<td><input type="checkbox" class="chk" name="select[]" value="<?=$player_id?>"/></td>
-                          			<td>
-                          				<a href="<?=$config['protocol']?>://<?=$config['server']?>.<?=$config['domain']?>/game.php?<?=$config['info_player']?><?=$player_id?>" target="_blank">
-                          					<?=$player_id ?>
-                          				</a>
-                          			</td>
-                          			<td><?=$data['name']?></td>
-                          			<td><?=isset($data['alliance']) ? $data['alliance'] : '------'?></td>
-                          			<td><?=number_format($data['total_points'], 0, ',', '.')?></td>
-                          			<td><?=number_format($data['position'], 0, ',', '.')?></td>
-                          			<td><?=number_format($data['total_villages'], 0, ',', '.')?></td>
-                          			<td><?=number_format($data['average_points'], 0, ',', '.')?></td>
-                          			<td><?=number_format($data['combats'], 0, ',', '.')?></td>
-                          			<td><?=number_format($data['defeat_opponents'], 0, ',', '.')?></td>
-                          			<td>
-                          				<br/>
-                          				<a href="<?=$config['localhost']?>stats.php?player=<?=$player_id?>" class="queue green button">Stats</a>
-                          				<a class="delete-row" data-location="admintracking.php?action=delete&id=<?=$player_id?>"  data-id="<?=$player_id?>">Delete</a>
-                          				<br/><br/>
-                          			</td>
-                          		</tr>
+                        <? if (is_array($tracks) && count($tracks) > 0) : ?>
+                          <? foreach ($tracks as $track) : ?>
+                            <? foreach ($track as $player_id => $data) : ?>
+                            		<tr class="<?=$data['enabled'] ? 'enable' : 'disabled'?>">
+                            			<td><input type="checkbox" class="chk" name="select[]" value="<?=$player_id?>"/></td>
+                            			<td>
+                            				<a href="<?=$config['protocol']?>://<?=$config['server']?>.<?=$config['domain']?>/game.php?<?=$config['info_player']?><?=$player_id?>" target="_blank">
+                            					<?=$player_id ?>
+                            				</a>
+                            			</td>
+                            			<td><?=$data['name']?></td>
+                            			<td><?=isset($data['alliance']) ? $data['alliance'] : '------'?></td>
+                            			<td><?=number_format($data['total_points'], 0, ',', '.')?></td>
+                            			<td><?=number_format($data['position'], 0, ',', '.')?></td>
+                            			<td><?=number_format($data['total_villages'], 0, ',', '.')?></td>
+                            			<td><?=number_format($data['average_points'], 0, ',', '.')?></td>
+                            			<td><?=number_format($data['combats'], 0, ',', '.')?></td>
+                            			<td><?=number_format($data['defeat_opponents'], 0, ',', '.')?></td>
+                            			<td>
+                            				<br/>
+                            				<a href="<?=$config['localhost']?>stats.php?player=<?=$player_id?>" class="queue green button">Stats</a>
+                            				<a class="delete-row" data-location="admintracking.php?action=delete&id=<?=$player_id?>"  data-id="<?=$player_id?>">Delete</a>
+                            				<br/><br/>
+                            			</td>
+                            		</tr>
+                            <? endforeach; ?>
                           <? endforeach; ?>
                         <? else : ?>
                           <tr>
