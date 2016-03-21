@@ -157,6 +157,8 @@ switch ($action) {
                     		<li>
                             <label>Player ID</label>
                             <input type="text" name="id" class="span3" value="<?= (isset($_POST['id'])) ? $_POST['id'] : null;?>"/>
+                        </li>
+                        <li>
                             <label>Player Name</label>
                             <input type="text" name="name" class="span6" value="<?= (isset($_POST['name'])) ? $_POST['name'] : null;?>"/>
                         </li>
