@@ -81,7 +81,7 @@ for ($i = 0; $i < $pages*2; $i++) {
 
 if (is_array($AlltrackingParsed) && count($AlltrackingParsed) > 0) {
 	
-	// total points
+	// Total points VS Alliance points
 	$pie_points = array();
 	$sum_points = 0;
 	foreach($AlltrackingParsed as $alliance => $tracks) {
@@ -111,7 +111,7 @@ if (is_array($AlltrackingParsed) && count($AlltrackingParsed) > 0) {
 	// troop points
 	$pie_troops = $pie_ally_troops = $user_data = array();
 	$sum_troops = $own_troops = 0;
-	foreach($AlltrackingParsed as $user_id => $tracks) {
+	foreach($AlltrackingParsed as $alliance => $tracks) {
 		if ($alliance == $userAlliance) {
 			for ($i=0; $i<count($tracks); $i++) {
 				foreach($tracks[$i] as $user_id => $stats) {
@@ -138,6 +138,7 @@ if (is_array($AlltrackingParsed) && count($AlltrackingParsed) > 0) {
 			}
 		}
 	}
+
 	// details troops
 	foreach($user_data as $user) {
 		if ($id == $user['id']) {
