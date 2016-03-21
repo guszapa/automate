@@ -25,7 +25,7 @@ foreach ($tracking as $key => $value) {
   }
   // Add info inside their alliance
   $userData[$key] = $value;
-  array_push($trackingParsed[$_alliance], $userData);
+  array_push($trackingParsed[$alliance], $userData);
 }
 
 /**
