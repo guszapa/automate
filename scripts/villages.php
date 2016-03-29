@@ -66,7 +66,7 @@ if (is_array($__res) && count($__res) > 0) {
 }
 // Update troops, materials and map only for own villages
 if ($_first_village || $_cron) {
-    sleep(rand(1,3));
+    sleep(rand(0,2));
     foreach ($villages['own'] as $village_id => $village) {
         // get own village data
         $url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php?village={$village_id}{$config['overview']}";
@@ -112,7 +112,7 @@ if ($_first_village || $_cron) {
         // Get map
         $url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/minimap.php?x={$village['x']}&y={$village['y']}";
         Automate::factory()->villageMap($village_id, $url);
-        sleep(rand(1,2));
+        sleep(rand(0,1));
     }
     // Save data
     $filename = dirname(dirname(__FILE__))."/{$paths['villages']}";

@@ -976,7 +976,7 @@ class Automate {
       }
    }
    /**
-    * Save village map if doesn't exists
+    * Save the current village map
     * @param integer village_id
     * @param string url
     * @return boolean
@@ -984,22 +984,18 @@ class Automate {
    public function villageMap($village_id, $url) {
       if (!is_dir(ROOT.self::$_paths['village_map'])) {
          mkdir(ROOT.self::$_paths['village_map'], 0777);
+      }
+      sleep(1);
+      $file = ROOT.self::$_paths['village_map']."/{$village_id}.png";
+      $referer = self::$_instance->_config['protocol'].'://'.self::$_instance->_config['server'].'.'.self::$_instance->_config['domain']."/game.php?s=map&village={$village_id}";
+      $_image = $this->_cURL($url, null, true, true, $referer);
+      if ($f = fopen($file, 'w')) {
+         fwrite($f, $_image);
+         fclose($f);
+         chmod($file, 0777);
+         return TRUE;
       } else {
-         $file = ROOT.self::$_paths['village_map']."/{$village_id}.png";
-         if (is_file($file)) {
-            return FALSE; // Image exists
-         } else {
-            $referer = self::$_instance->_config['protocol'].'://'.self::$_instance->_config['server'].'.'.self::$_instance->_config['domain']."/game.php?s=map&village={$village_id}";
-            $_image = $this->_cURL($url, null, true, true, $referer);
-            if ($f = fopen($file, 'w')) {
-               fwrite($f, $_image);
-               fclose($f);
-               chmod($file, 0777);
-               return TRUE;
-            } else {
-               return FALSE;
-            }
-         }
+         return FALSE;
       }
    }
    /**
