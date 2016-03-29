@@ -976,19 +976,25 @@ class Automate {
       }
    }
    /**
-    * Save the current village map
+    * Save village map if doesn't exists
     * @param integer village_id
     * @param string url
     * @return boolean
     */
    public function villageMap($village_id, $url) {
+      // Create directory if nos exists
       if (!is_dir(ROOT.self::$_paths['village_map'])) {
          mkdir(ROOT.self::$_paths['village_map'], 0777);
       }
-      sleep(1);
       $file = ROOT.self::$_paths['village_map']."/{$village_id}.png";
+
+      // Remove previous map
+      if (is_file($file)) {
+        unlink($file);
+      }
       $referer = self::$_instance->_config['protocol'].'://'.self::$_instance->_config['server'].'.'.self::$_instance->_config['domain']."/game.php?s=map&village={$village_id}";
       $_image = $this->_cURL($url, null, true, true, $referer);
+      // Save IMage
       if ($f = fopen($file, 'w')) {
          fwrite($f, $_image);
          fclose($f);
