@@ -483,19 +483,19 @@ if (is_array($history) && count($history) > 0) {
 			<? endif; ?>
             <!-- CHARTS !!! -->
 			<? if ($stats) : ?>
-				<div class="table">
+				<div class="table" style="margin-top: 8px;">
 					<div id="pie_ally_troops" class="center"></div>
 				</div>
-				<div class="table">
-					<div id="pie_points" class="table-cell"></div>
+				<div class="table" style="margin-top: 8px;">
+					<div id="pie_points" class="table-cell" style="padding-right: 6px;"></div>
 					<div id="pie_troops" class="table-cell"></div>
 				</div>
-				<div class="">
+				<div class="" style="margin-top: 8px;">
 					<div id="total_points" class=""></div>
 					<div id="average_points" class=""></div>
                     <div id="villages" class=""></div>
 				</div>
-				<div class="">
+				<div class="" style="margin-top: 8px;">
 					<div id="troop_points" class=""></div>
 					<div id="defeat_opponents" class=""></div>
 				</div>
