@@ -468,7 +468,7 @@ if (is_array($history) && count($history) > 0) {
 			<? if (count($paginator) > 1) : ?>
             <br/>
 			<ul class="form center" style="width: 460px">
-			<? foreach($paginator as $i => $page) : ?>
+				<? foreach($paginator as $i => $page) : ?>
 				<li class="left padding8">
 					<? if(is_array($page)) :?>
 						<a href="<?=$config['localhost']?>stats.php?player=<?=$id?>&week=<?=$page[0]?>&year=<?=$page[1]?>">Week <?=$page[0]?> <?=$page[1]?></a>
@@ -476,7 +476,7 @@ if (is_array($history) && count($history) > 0) {
 						<b style="font-size:0.9em;">Week <?=$_week?> <?=$_year?></b>
 					<? endif; ?>
 				</li>
-			<? endforeach; ?>
+				<? endforeach; ?>
 				<li class="both"></li>
 			</ul>
             <br/>
@@ -487,17 +487,17 @@ if (is_array($history) && count($history) > 0) {
 					<div id="pie_ally_troops" class="center"></div>
 				</div>
 				<div class="table" style="margin-top: 8px;">
-					<div id="pie_points" class="table-cell" style="padding-right: 6px;"></div>
-					<div id="pie_troops" class="table-cell"></div>
+					<div id="pie_points" class="table-cell" style="max-width: 48%; padding-right: 6px;"></div>
+					<div id="pie_troops" class="table-cell" style="max-width: 48%;"></div>
 				</div>
-				<div class="" style="margin-top: 8px;">
-					<div id="total_points" class=""></div>
-					<div id="average_points" class=""></div>
+				<div>
+					<div id="total_points" style="margin-top: 8px;"></div>
+					<div id="average_points" style="margin-top: 8px;"></div>
                     <div id="villages" class=""></div>
 				</div>
-				<div class="" style="margin-top: 8px;">
-					<div id="troop_points" class=""></div>
-					<div id="defeat_opponents" class=""></div>
+				<div>
+					<div id="troop_points" style="margin-top: 8px;"></div>
+					<div id="defeat_opponents" style="margin-top: 8px;"></div>
 				</div>
 				<br/>
 			<? else : ?>
