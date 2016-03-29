@@ -487,13 +487,13 @@ if (is_array($history) && count($history) > 0) {
 					<div id="pie_ally_troops" class="center"></div>
 				</div>
 				<div class="table" style="margin-top: 8px;">
-					<div id="pie_points" class="table-cell" style="max-width: 48%; padding-right: 6px;"></div>
-					<div id="pie_troops" class="table-cell" style="max-width: 48%;"></div>
+					<div id="pie_points" class="center" style="margin-top: 8px;"></div>
+					<div id="pie_troops" class="center" style="margin-top: 8px;"></div>
 				</div>
 				<div>
 					<div id="total_points" style="margin-top: 8px;"></div>
 					<div id="average_points" style="margin-top: 8px;"></div>
-                    <div id="villages" class=""></div>
+                    <div id="villages" style="margin-top: 8px;"></div>
 				</div>
 				<div>
 					<div id="troop_points" style="margin-top: 8px;"></div>
