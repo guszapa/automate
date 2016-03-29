@@ -292,9 +292,16 @@ if (is_array($history) && count($history) > 0) {
             top: 75px;
             display: none;
           }
+          div.global_stats {
+          	position: relative;
+          	margin: 0 auto;
+          }
           ul.current_stats {
           	width:360px;
-          	margin: 0 auto;
+          	max-height: 200px;
+          	overflow-y: auto;
+          	overflow-x: hidden;
+          	display: inline-block;
           	list-style: none;
           	padding: 10px 4px;
           	background-color: #ccc;
@@ -303,6 +310,7 @@ if (is_array($history) && count($history) > 0) {
 			 ul.current_stats li {
 			 	padding: 2px 10px;
 			 	font-size: 0.9em;
+			 	color: #000;
 			 }
         </style>
         <script type="text/javascript">
@@ -413,40 +421,50 @@ if (is_array($history) && count($history) > 0) {
             <br/>
 			<h2 class="center" style="width:120px;">Week <?=$_week?> <?=$_year?></h2>
 			<br/>
-            <ul class="current_stats">
-            	<li>
-            		<label>Player name:</label>
-            		<span><b><?=$tracking['name']?></b></span>
-            	</li>
-            	<li>
-            		<label>Alliance (position):</label>
-            		<span><b><?=isset($tracking['alliance']) ? $tracking['alliance'] : '-----'?></b></span>
-            	</li>
-            	<li>
-            		<label>Total points:</label>
-            		<span><b><?=number_format($tracking['total_points'], 0, ',', '.')?></b></span>
-            	</li>
-            	<li>
-            		<label>Position:</label>
-            		<span><b><?=number_format($tracking['position'], 0, ',', '.')?></b></span>
-            	</li>
-            	<li>
-            		<label>Total villages:</label>
-            		<span><b><?=number_format($tracking['total_villages'], 0, ',', '.')?></b></span>
-            	</li>
-            	<li>
-            		<label>Average points:</label>
-            		<span><b><?=number_format($tracking['average_points'], 0, ',', '.')?></b></span>
-            	</li>
-            	<li>
-            		<label>Combats:</label>
-            		<span><b><?=number_format($tracking['combats'], 0, ',', '.')?></b></span>
-            	</li>
-            	<li>
-            		<label>Defeat opponents:</label>
-            		<span><b><?=number_format($tracking['defeat_opponents'], 0, ',', '.')?></b></span>
-            	</li>
-            </ul>
+			<div class="global_stats">
+				<ul class="current_stats">
+	            	<li>
+	            		<label>Player name:</label>
+	            		<span><b><?=$tracking['name']?></b></span>
+	            	</li>
+	            	<li>
+	            		<label>Alliance (position):</label>
+	            		<span><b><?=isset($tracking['alliance']) ? $tracking['alliance'] : '-----'?></b></span>
+	            	</li>
+	            	<li>
+	            		<label>Total points:</label>
+	            		<span><b><?=number_format($tracking['total_points'], 0, ',', '.')?></b></span>
+	            	</li>
+	            	<li>
+	            		<label>Position:</label>
+	            		<span><b><?=number_format($tracking['position'], 0, ',', '.')?></b></span>
+	            	</li>
+	            	<li>
+	            		<label>Total villages:</label>
+	            		<span><b><?=number_format($tracking['total_villages'], 0, ',', '.')?></b></span>
+	            	</li>
+	            	<li>
+	            		<label>Average points:</label>
+	            		<span><b><?=number_format($tracking['average_points'], 0, ',', '.')?></b></span>
+	            	</li>
+	            	<li>
+	            		<label>Combats:</label>
+	            		<span><b><?=number_format($tracking['combats'], 0, ',', '.')?></b></span>
+	            	</li>
+	            	<li>
+	            		<label>Defeat opponents:</label>
+	            		<span><b><?=number_format($tracking['defeat_opponents'], 0, ',', '.')?></b></span>
+	            	</li>
+	            </ul>
+	            <ul class="current_stats">
+	            	<? foreach($tracking['villages'] as $key => $village) : ?>
+	            		<li>
+	            			<a href="<?=$config['protocol']?>://<?=$config['server']?>.<?=$config['domain']?>/game.php?village=<?=$village['id'].$config['main']?>" target="_blank">
+	            				<?= $village['name'] ?> (<?= $village['x'] ?>|<?= $village['y'] ?>)</a> - <?= $village['points'] ?>
+	            		</li>
+	            	<? endforeach; ?>
+	            </ul>
+			</div>
 			<? if (count($paginator) > 1) : ?>
             <br/>
 			<ul class="form center" style="width: 460px">
