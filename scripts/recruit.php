@@ -82,21 +82,41 @@ foreach ($recruit as $village_id => $troops) {
 			$troop = '';
 			$quantity = 0;
 
+			echo "<pre><bTroops:</b> {$troops}</pre>";
+			echo "<pre><Count troops:</b> {$_count_troops}</pre>";
+
 			if (isset($troops['primary'])) {
 				$troop = $troops['primary'];
 				$quantity = numberRecruit($data, $rules, $troops, $troop);
 				$post[$troop] = $quantity; // Add troop and quantity to recruit
+
+				echo "<pre><b>primary troop:</b> {$troop}</pre>";
+				echo "<pre><b>quantity:</b> {$quantity}</pre>";
+				echo "<pre><b>Add troop:</b> {$post}</pre>";
+				echo "<hr/>";
+
 			} else {
 				$troop = findTroop($troops);
 				$quantity = numberRecruit($data, $rules, $troops, $troop);
 				$post[$troop] = $quantity; // Add troop and quantity to recruit
+
+				echo "<pre><b>troop:</b> {$troop}</pre>";
+				echo "<pre><b>quantity:</b> {$quantity}</pre>";
+				echo "<pre><b>Add troop:</b> {$post}</pre>";
+				echo "<hr/>";
 			}
 			// Reduce troops
 			$troops[$troop] = $recruit[$village_id][$troop] -= $quantity;
 
+			echo "<pre><b>Reduce troops:</b> {$troops[$troop]}</pre>";
+			echo "<pre><b>Current troops:</b> {$troops}</pre>";
+			echo "<hr/>";
+
 			// If current primary troops has been a zero, change or delete row
 			if ($recruit[$village_id][$troop] == 0) {
 				$_troop = findTroop($troops);
+
+				echo "<pre><b>troop:</b> {$_troop}</pre>";
 
 				if ($_troop != '') {
 					$recruit[$village_id]['primary'] = $_troop;
@@ -105,12 +125,23 @@ foreach ($recruit as $village_id => $troops) {
 					// Reduce troops
 					$troops[$_troop] = $recruit[$village_id][$_troop] -= $quantity;
 
+					echo "<pre><b>change primary troop:</b> {$_troop}</pre>";
+					echo "<pre><b>quantity:</b> {$post}</pre>";
+					echo "<pre><b>Reduce troops:</b> {$troops[$_troop]}</pre>";
+					echo "<pre><b>Current troops:</b> {$troops}</pre>";
+
 				} else {
 					unset($recruit[$village_id]); // remove row if doesn't have any troop to recruit
+
+					echo "<pre><b>Remove village without troops:</b> {$recruit[$village_id]}</pre>";
+					echo "<pre><b>Current troops</b> {$troops}</pre>";
+					echo "<pre><b>quantity:</b> {$quantity}</pre>";
 				}
 			}
 
-			sleep(rand(4,8));
+			sleep(rand(2,6));
+
+			/*
 			// Call to game to recruit troops
 			if ($html = Automate::factory()->Recruit($village_id, $post, $data['proof'])) {
 				// Revision error
@@ -134,6 +165,7 @@ foreach ($recruit as $village_id => $troops) {
 					@Automate::factory()->log('R', " on {$villages[$village_id]['name']} with troops {$_troops_recruited}");
 				}
 			}
+			*/
 		}
 	}
 }
