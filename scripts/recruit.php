@@ -83,7 +83,9 @@ foreach ($recruit as $village_id => $troops) {
 			$quantity = 0;
 
 			echo "<pre><b>current troops:</b> "; print_r($troops); echo "</pre>";
-			echo "<pre><Count troops:</b> {$_count_troops}</pre>";
+			echo "<pre><b>Count troops:</b> {$_count_troops}</pre>";
+			echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
+			echo "<hr/>";
 
 			if (isset($troops['primary'])) {
 				$troop = $troops['primary'];
@@ -93,6 +95,7 @@ foreach ($recruit as $village_id => $troops) {
 				echo "<pre><b>primary troop:</b> {$troop}</pre>";
 				echo "<pre><b>quantity:</b> {$quantity}</pre>";
 				echo "<pre><b>Add troop:</b> "; print_r($post); echo "</pre>";
+				echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
 				echo "<hr/>";
 
 			} else {
@@ -103,6 +106,7 @@ foreach ($recruit as $village_id => $troops) {
 				echo "<pre><b>troop:</b> {$troop}</pre>";
 				echo "<pre><b>quantity:</b> {$quantity}</pre>";
 				echo "<pre><b>Add troop:</b>"; print_r($post); echo "</pre>";
+				echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
 				echo "<hr/>";
 			}
 			// Reduce troops
@@ -129,6 +133,7 @@ foreach ($recruit as $village_id => $troops) {
 					echo "<pre><b>quantity:</b> {$quantity}</pre>";
 					echo "<pre><b>Add troop:</b>"; print_r($post); echo "</pre>";
 					echo "<pre><b>Reduce troops:</b> {$troops[$_troop]}</pre>";
+					echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
 					echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
 
 				} else {
@@ -139,6 +144,9 @@ foreach ($recruit as $village_id => $troops) {
 					echo "<pre><b>quantity:</b> {$quantity}</pre>";
 				}
 			}
+
+			echo "<hr>";
+			echo "<pre><b>Troops to recruit on game:</b> "; print_r($post); echo "</pre>";
 
 			sleep(rand(2,6));
 
