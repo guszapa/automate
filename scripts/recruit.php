@@ -77,43 +77,47 @@ function numberRecruit(&$data, &$rules, &$troops, $troop) {
 
 // Loop arround villages
 foreach ($recruit as $village_id => $troops) {
-	$remaining_troops = 0;
+	
+	// Call game to get the required data like materials and settlers
+	if ($data = Automate::factory()->getRecruitData($village_id)) {
+		$remaining_troops = 0;
 
-	// Loop arround troops to recruit
-	foreach ($troops as $troop => $value) {
+		// Loop arround troops to recruit
+		foreach ($troops as $troop => $value) {
 
-		// There're troops to recruit
-		if ((int)$value > 0) {
-			// Get the recruitable troop number
-			$quantity = numberRecruit($data, $rules, $troops, $troop);
+			// There're troops to recruit
+			if ((int)$value > 0) {
+				// Get the recruitable troop number
+				$quantity = numberRecruit($data, $rules, $troops, $troop);
 
-			if ($quantity > 0) {
-				// Add troop and quantity to recruit
-				$post[$troop] = $quantity;
-				// Reduce troops
-				$troops[$troop] = $recruit[$village_id][$troop] -= $quantity;
+				if ($quantity > 0) {
+					// Add troop and quantity to recruit
+					$post[$troop] = $quantity;
+					// Reduce troops
+					$troops[$troop] = $recruit[$village_id][$troop] -= $quantity;
+				}
+
+				echo "<pre><b>troop:</b> {$troop}</pre>";
+				echo "<pre><b>quantity:</b> {$quantity}</pre>";
+				echo "<pre><b>Add troop:</b>"; print_r($post); echo "</pre>";
+				echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
+				echo "<hr/>";
 			}
-
-			echo "<pre><b>troop:</b> {$troop}</pre>";
-			echo "<pre><b>quantity:</b> {$quantity}</pre>";
-			echo "<pre><b>Add troop:</b>"; print_r($post); echo "</pre>";
-			echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
+			// remaining troops to recruit
+			$remaining_troops += $recruit[$village_id][$troop];
+			echo "<pre><b>remaining troops:</b> {$remaining_troops}</pre>";
 			echo "<hr/>";
 		}
-		// remaining troops to recruit
-		$remaining_troops += $recruit[$village_id][$troop];
-		echo "<pre><b>remaining troops:</b> {$remaining_troops}</pre>";
-		echo "<hr/>";
-	}
 
-	// remove row if doesn't have any troop to recruit
-	if ($remaining_troops == 0) {
-		unset($recruit[$village_id]);
+		// remove row if doesn't have any troop to recruit
+		if ($remaining_troops == 0) {
+			unset($recruit[$village_id]);
 
-		echo "<pre><b>Remove village without troops:</b> {$recruit[$village_id]}</pre>";
-		echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
-		echo "<pre><b>quantity:</b> {$quantity}</pre>";
-		echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
+			echo "<pre><b>Remove village without troops:</b> {$recruit[$village_id]}</pre>";
+			echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
+			echo "<pre><b>quantity:</b> {$quantity}</pre>";
+			echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
+		}
 	}
 
 
