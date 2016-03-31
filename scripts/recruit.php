@@ -54,11 +54,14 @@ function numberRecruit(&$data, &$rules, &$troops, $troop) {
 		}
 		$_troopsRecruitable = floor($data['materials'][$_material]/$_max);
 		$_recruit = $_troopsRecruitable > $troops[$troop] ? $troops[$troop] : $_troopsRecruitable;
-		$_recruitable = (int)$data['settlers'] > $_max ? $_recruit : $data['settlers']-1;
+		$_required_settelers = $rules['troops'][$troop]['settlers'] * $_recruit;
+		$_recruitable = (int)$data['settlers'] > $_required_settelers ? $_recruit : floor($data['settlers']/$rules['troops'][$troop]['settlers']);
 		// Reduce materials
 		$data['materials']['stone'] -= $_recruitable*$rules['troops'][$troop]['materials']['stone'];
 		$data['materials']['wood'] -= $_recruitable*$rules['troops'][$troop]['materials']['wood'];
 		$data['materials']['iron'] -= $_recruitable*$rules['troops'][$troop]['materials']['iron'];
+		// Reduce settelers
+		$data['settlers'] -= $_recruitable*$rules['troops'][$troop]['settlers'];
 		return $_recruitable;
 	}
 }
@@ -73,8 +76,8 @@ foreach ($recruit as $village_id => $troops) {
 		// Loop arround troops to recruit
 		foreach ($troops as $troop => $value) {
 
-			// There're troops to recruit
-			if ((int)$value > 0) {
+			// There're troops to recruit and available settelers
+			if ((int)$value > 0 && (int)$data['settlers'] > 0) {
 				// Get the recruitable troop number
 				$quantity = numberRecruit($data, $rules, $troops, $troop);
 
