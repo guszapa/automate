@@ -77,7 +77,7 @@ function numberRecruit(&$data, &$rules, &$troops, $troop) {
 
 // Loop arround villages
 foreach ($recruit as $village_id => $troops) {
-	
+
 	// Call game to get the required data like materials and settlers
 	if ($data = Automate::factory()->getRecruitData($village_id)) {
 		$remaining_troops = 0;
@@ -113,10 +113,7 @@ foreach ($recruit as $village_id => $troops) {
 		if ($remaining_troops == 0) {
 			unset($recruit[$village_id]);
 
-			echo "<pre><b>Remove village without troops:</b> {$recruit[$village_id]}</pre>";
-			echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
-			echo "<pre><b>quantity:</b> {$quantity}</pre>";
-			echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
+			echo "<pre><b>Remove village without troops:</b> {$village_id}</pre>";
 		}
 	}
 
