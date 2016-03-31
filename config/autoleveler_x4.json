@@ -147,5 +147,67 @@
 			"workers": [25, 5, 6, 7, 9],
 			"buildTime": [527, 639, 774, 936, 1130]
 		}
+	},
+	"troops": {
+		"farmer": {
+			"min_level": 1,
+			"buildTime": 30,
+			"settlers": 1,
+			"materials": { "stone": 3, "wood": 10, "iron": 7 }
+		},
+		"sword": {
+			"min_level": 1,
+			"buildTime": 143,
+			"settlers": 1,
+			"materials": { "stone": 30, "wood": 10, "iron": 80 }
+		},
+		"spear": {
+			"min_level": 1,
+			"buildTime": 105,
+			"settlers": 1,
+			"materials": { "stone": 10, "wood": 20, "iron": 30 }
+		},
+		"axe": {
+			"min_level": 2,
+			"buildTime": 122,
+			"settlers": 1,
+			"materials": { "stone": 40, "wood": 50, "iron": 50 }
+		},
+		"bow": {
+			"min_level": 5,
+			"buildTime": 151,
+			"settlers": 1,
+			"materials": { "stone": 80, "wood": 160, "iron": 80 }
+		},
+		"spy":{
+			"min_level": 4,
+			"buildTime": 272,
+			"settlers": 2,
+			"materials": { "stone": 40, "wood": 60, "iron": 60 }
+		},
+		"light": {
+			"min_level": 7,
+			"buildTime": 634,
+			"settlers": 4,
+			"materials": { "stone": 100, "wood": 100, "iron": 300 }
+		},
+		"heavy": {
+			"min_level": 16,
+			"buildTime": 904,
+			"settlers": 6,
+			"materials": { "stone": 100, "wood": 300, "iron": 500 }
+		},
+		"ram": {
+			"min_level": 20,
+			"buildTime": 2105,
+			"settlers": 5,
+			"materials": { "stone": 100, "wood": 500, "iron": 200 }
+		},
+		"kata": {
+			"min_level": 25,
+			"buildTime": 2999,
+			"settlers": 8,
+			"materials": { "stone": 200, "wood": 600, "iron": 200 }
+		}
 	}
 }
