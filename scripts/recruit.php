@@ -82,7 +82,7 @@ foreach ($recruit as $village_id => $troops) {
 			$troop = '';
 			$quantity = 0;
 
-			echo "<pre><bTroops:</b> {$troops}</pre>";
+			echo "<pre><b>current troops:</b> "; print_r($troops); echo "</pre>";
 			echo "<pre><Count troops:</b> {$_count_troops}</pre>";
 
 			if (isset($troops['primary'])) {
@@ -92,7 +92,7 @@ foreach ($recruit as $village_id => $troops) {
 
 				echo "<pre><b>primary troop:</b> {$troop}</pre>";
 				echo "<pre><b>quantity:</b> {$quantity}</pre>";
-				echo "<pre><b>Add troop:</b> {$post}</pre>";
+				echo "<pre><b>Add troop:</b> "; print_r($post); echo "</pre>";
 				echo "<hr/>";
 
 			} else {
@@ -102,14 +102,14 @@ foreach ($recruit as $village_id => $troops) {
 
 				echo "<pre><b>troop:</b> {$troop}</pre>";
 				echo "<pre><b>quantity:</b> {$quantity}</pre>";
-				echo "<pre><b>Add troop:</b> {$post}</pre>";
+				echo "<pre><b>Add troop:</b>"; print_r($post); echo "</pre>";
 				echo "<hr/>";
 			}
 			// Reduce troops
 			$troops[$troop] = $recruit[$village_id][$troop] -= $quantity;
 
 			echo "<pre><b>Reduce troops:</b> {$troops[$troop]}</pre>";
-			echo "<pre><b>Current troops:</b> {$troops}</pre>";
+			echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
 			echo "<hr/>";
 
 			// If current primary troops has been a zero, change or delete row
@@ -126,15 +126,16 @@ foreach ($recruit as $village_id => $troops) {
 					$troops[$_troop] = $recruit[$village_id][$_troop] -= $quantity;
 
 					echo "<pre><b>change primary troop:</b> {$_troop}</pre>";
-					echo "<pre><b>quantity:</b> {$post}</pre>";
+					echo "<pre><b>quantity:</b> {$quantity}</pre>";
+					echo "<pre><b>Add troop:</b>"; print_r($post); echo "</pre>";
 					echo "<pre><b>Reduce troops:</b> {$troops[$_troop]}</pre>";
-					echo "<pre><b>Current troops:</b> {$troops}</pre>";
+					echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
 
 				} else {
 					unset($recruit[$village_id]); // remove row if doesn't have any troop to recruit
 
 					echo "<pre><b>Remove village without troops:</b> {$recruit[$village_id]}</pre>";
-					echo "<pre><b>Current troops</b> {$troops}</pre>";
+					echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
 					echo "<pre><b>quantity:</b> {$quantity}</pre>";
 				}
 			}
