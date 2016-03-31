@@ -23,17 +23,6 @@ $paths = Automate::factory()->getPaths();
 $config = Automate::factory()->getConfig();
 $_updated = time();
 
-// function findTroop(&$troops) {
-// 	$_troop = '';
-// 	foreach ($troops as $key => $value) {
-// 		if ((int)$value > 0) {
-// 			$_troop = $key;
-// 			break 1;
-// 		}
-// 	}
-// 	return $_troop;
-// }
-
 /**
  * Calculate the number of troops can be recruit
  * @param  [Array] 	&$data
@@ -96,17 +85,9 @@ foreach ($recruit as $village_id => $troops) {
 					// Reduce troops
 					$troops[$troop] = $recruit[$village_id][$troop] -= $quantity;
 				}
-
-				echo "<pre><b>troop:</b> {$troop}</pre>";
-				echo "<pre><b>quantity:</b> {$quantity}</pre>";
-				echo "<pre><b>Add troop:</b>"; print_r($post); echo "</pre>";
-				echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
-				echo "<hr/>";
 			}
 			// remaining troops to recruit
 			$remaining_troops += $recruit[$village_id][$troop];
-			echo "<pre><b>remaining troops:</b> {$remaining_troops}</pre>";
-			echo "<hr/>";
 		}
 
 		// remove row if doesn't have any troop to recruit
@@ -115,112 +96,49 @@ foreach ($recruit as $village_id => $troops) {
 
 			echo "<pre><b>Remove village without troops:</b> {$village_id}</pre>";
 		}
+
+		// TODO: REMOVE IT
+		// Save recruit data
+		if ($f = fopen(dirname(dirname(__FILE__))."/{$paths['recruit']}", 'w')) {
+			fwrite($f, json_encode($recruit, TRUE));
+			fclose($f);
+		} else {
+			@Automate::factory()->log('E', "Failed save data on file ".dirname(dirname(__FILE__))."/{$paths['recruit']}");
+		}
+		// Save log
+		$_troops_recruited = '';
+		foreach ($post as $key => $value) {
+			if ($_troops_recruited != '') $_troops_recruited .= ', ';
+			$_troops_recruited .= "{$key}: {$value}";
+		}
+		@Automate::factory()->log('R', " on {$villages[$village_id]['name']} with troops {$_troops_recruited}");
+		// END TO REMOVE
+
+		// // Call to game to recruit troops
+		// if ($html = Automate::factory()->Recruit($village_id, $post, $data['proof'])) {
+		// 	// Revision error
+		// 	if (preg_match('/<p class="error">.+<\/p>/', $html, $error)) {
+		// 		// If has been error save on log
+		// 		@Automate::factory()->log('E', "Recruit - " . strip_tags($error[0]));
+		// 	} else {
+		// 		// Save recruit data
+		// 		if ($f = fopen(dirname(dirname(__FILE__))."/{$paths['recruit']}", 'w')) {
+		// 			fwrite($f, json_encode($recruit, TRUE));
+		// 			fclose($f);
+		// 		} else {
+		// 			@Automate::factory()->log('E', "Failed save data on file ".dirname(dirname(__FILE__))."/{$paths['recruit']}");
+		// 		}
+		// 		// Save log
+		// 		$_troops_recruited = '';
+		// 		foreach ($post as $key => $value) {
+		// 			if ($_troops_recruited != '') $_troops_recruited .= ', ';
+		// 			$_troops_recruited .= "{$key}: {$value}";
+		// 		}
+		// 		@Automate::factory()->log('R', " on {$villages[$village_id]['name']} with troops {$_troops_recruited}");
+		// 	}
+		// }	
 	}
-
-
-	// // There're troops for recruit, call to game to update information and get proof
-	// if ($_count_troops > 0) {
-	// 	if ($data = Automate::factory()->getRecruitData($village_id)) {
-
-	// 		$post = Array();
-	// 		$troop = '';
-	// 		$quantity = 0;
-
-	// 		echo "<pre><b>current troops:</b> "; print_r($troops); echo "</pre>";
-	// 		echo "<pre><b>Count troops:</b> {$_count_troops}</pre>";
-	// 		echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
-	// 		echo "<hr/>";
-
-	// 		if (isset($troops['primary'])) {
-	// 			$troop = $troops['primary'];
-	// 			$quantity = numberRecruit($data, $rules, $troops, $troop);
-	// 			$post[$troop] = $quantity; // Add troop and quantity to recruit
-
-	// 			echo "<pre><b>primary troop:</b> {$troop}</pre>";
-	// 			echo "<pre><b>quantity:</b> {$quantity}</pre>";
-	// 			echo "<pre><b>Add troop:</b> "; print_r($post); echo "</pre>";
-	// 			echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
-	// 			echo "<hr/>";
-
-	// 		} else {
-	// 			$troop = findTroop($troops);
-	// 			$quantity = numberRecruit($data, $rules, $troops, $troop);
-	// 			$post[$troop] = $quantity; // Add troop and quantity to recruit
-
-	// 			echo "<pre><b>troop:</b> {$troop}</pre>";
-	// 			echo "<pre><b>quantity:</b> {$quantity}</pre>";
-	// 			echo "<pre><b>Add troop:</b>"; print_r($post); echo "</pre>";
-	// 			echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
-	// 			echo "<hr/>";
-	// 		}
-	// 		// Reduce troops
-	// 		$troops[$troop] = $recruit[$village_id][$troop] -= $quantity;
-
-	// 		echo "<pre><b>Reduce troops:</b> {$troops[$troop]}</pre>";
-	// 		echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
-	// 		echo "<hr/>";
-
-	// 		// If current primary troops has been a zero, change or delete row
-	// 		if ($recruit[$village_id][$troop] == 0) {
-	// 			$_troop = findTroop($troops);
-
-	// 			echo "<pre><b>troop:</b> {$_troop}</pre>";
-
-	// 			if ($_troop != '') {
-	// 				$recruit[$village_id]['primary'] = $_troop;
-	// 				$quantity = numberRecruit($data, $rules, $troops, $_troop);
-	// 				$post[$_troop] = $quantity; // Add troop and quantity to recruit
-	// 				// Reduce troops
-	// 				$troops[$_troop] = $recruit[$village_id][$_troop] -= $quantity;
-
-	// 				echo "<pre><b>change primary troop:</b> {$_troop}</pre>";
-	// 				echo "<pre><b>quantity:</b> {$quantity}</pre>";
-	// 				echo "<pre><b>Add troop:</b>"; print_r($post); echo "</pre>";
-	// 				echo "<pre><b>Reduce troops:</b> {$troops[$_troop]}</pre>";
-	// 				echo "<pre><b>Current materials: </b> "; print_r($data['materials']); echo "</pre>";
-	// 				echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
-
-	// 			} else {
-	// 				unset($recruit[$village_id]); // remove row if doesn't have any troop to recruit
-
-	// 				echo "<pre><b>Remove village without troops:</b> {$recruit[$village_id]}</pre>";
-	// 				echo "<pre><b>Current troops:</b> "; print_r($troops); echo "</pre>";
-	// 				echo "<pre><b>quantity:</b> {$quantity}</pre>";
-	// 			}
-	// 		}
-
-	// 		echo "<hr>";
-	// 		echo "<pre><b>Troops to recruit on game:</b> "; print_r($post); echo "</pre>";
-
-	// 		sleep(rand(2,6));
-
-	// 		/*
-	// 		// Call to game to recruit troops
-	// 		if ($html = Automate::factory()->Recruit($village_id, $post, $data['proof'])) {
-	// 			// Revision error
-	// 			if (preg_match('/<p class="error">.+<\/p>/', $html, $error)) {
-	// 				// If has been error save on log
-	// 				@Automate::factory()->log('E', "Recruit - " . strip_tags($error[0]));
-	// 			} else {
-	// 				// Save recruit data
-	// 				if ($f = fopen(dirname(dirname(__FILE__))."/{$paths['recruit']}", 'w')) {
-	// 					fwrite($f, json_encode($recruit, TRUE));
-	// 					fclose($f);
-	// 				} else {
-	// 					@Automate::factory()->log('E', "Failed save data on file ".dirname(dirname(__FILE__))."/{$paths['recruit']}");
-	// 				}
-	// 				// Save log
-	// 				$_troops_recruited = '';
-	// 				foreach ($post as $key => $value) {
-	// 					if ($_troops_recruited != '') $_troops_recruited .= ', ';
-	// 					$_troops_recruited .= "{$key}: {$value}";
-	// 				}
-	// 				@Automate::factory()->log('R', " on {$villages[$village_id]['name']} with troops {$_troops_recruited}");
-	// 			}
-	// 		}
-	// 		*/
-	// 	}
-	// }
+	// sleep(rand(2,4));
 }
 
 $end = microtime(true);
