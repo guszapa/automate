@@ -23,7 +23,7 @@ $paths = Automate::factory()->getPaths();
 $config = Automate::factory()->getConfig();
 $save = $ended = false;
 $time = array(); // if queue is full, check the timestamp to remove
-$_res = array():
+$_res = array();
 $_updated = time();
 $_settlers = 0;
 
