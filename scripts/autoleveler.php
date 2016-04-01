@@ -23,7 +23,9 @@ $paths = Automate::factory()->getPaths();
 $config = Automate::factory()->getConfig();
 $save = $ended = false;
 $time = array(); // if queue is full, check the timestamp to remove
+$_res = array():
 $_updated = time();
+$_settlers = 0;
 
 // Remove buildings finished first
 foreach ($villages as $village_id => $queue) {
@@ -91,14 +93,7 @@ foreach ($villages as $village_id => $queue) {
 							$villages[$village_id]['working'][] = array($name => array('level' => $level, 'end' => $_time));
 							// Remove building from queue
 							array_shift($villages[$village_id]['queue']);
-							// Update materials and settlers on villages data
-							if (!empty($_settlers)) {
-								$villages_json['own'][$village_id]['settlers'] = $_settlers;
-							}
-							$villages_json['own'][$village_id]['materials'] = $_res;
-							$villages_json['own'][$village_id]['updated'] = $_updated;
-							$save = true;
-							sleep(rand(3,6)); // wait to next building
+							sleep(rand(2,4)); // wait to next building
 						} else {
 							unset($_res['error']);
 							if (!empty($_settlers)) {
@@ -112,6 +107,15 @@ foreach ($villages as $village_id => $queue) {
 					} else {
 						break 2;
 					}
+				}
+				// Update materials and settlers on villages data at the autolever finish
+				if (!isset($_res['error'])) {
+					if (!empty($_settlers)) {
+						$villages_json['own'][$village_id]['settlers'] = $_settlers;
+					}
+					$villages_json['own'][$village_id]['materials'] = $_res;
+					$villages_json['own'][$village_id]['updated'] = $_updated;
+					$save = true;
 				}
 			}
 		}
