@@ -68,9 +68,9 @@ function numberRecruit(&$data, &$rules, &$troops, $troop) {
 
 // Loop arround villages
 foreach ($recruit as $village_id => $troops) {
-
 	// Call game to get the required data like materials and settlers
 	if ($data = Automate::factory()->getRecruitData($village_id)) {
+		$post[$village_id] = Array();
 		$remaining_troops = 0;
 
 		// Loop arround troops to recruit
@@ -83,7 +83,7 @@ foreach ($recruit as $village_id => $troops) {
 
 				if ($quantity > 0) {
 					// Add troop and quantity to recruit
-					$post[$troop] = $quantity;
+					$post[$village_id][$troop] = $quantity;
 					// Reduce troops
 					$troops[$troop] = $recruit[$village_id][$troop] -= $quantity;
 				}
@@ -98,7 +98,7 @@ foreach ($recruit as $village_id => $troops) {
 		}
 
 		// Call to game to recruit troops
-		if ($html = Automate::factory()->Recruit($village_id, $post, $data['proof'])) {
+		if ($html = Automate::factory()->Recruit($village_id, $post[$village_id], $data['proof'])) {
 			// Revision error
 			if (preg_match('/<p class="error">.+<\/p>/', $html, $error)) {
 				// If has been error save on log
@@ -113,13 +113,13 @@ foreach ($recruit as $village_id => $troops) {
 				}
 				// Save log
 				$_troops_recruited = '';
-				foreach ($post as $key => $value) {
+				foreach ($post[$village_id] as $key => $value) {
 					if ($_troops_recruited != '') $_troops_recruited .= ', ';
 					$_troops_recruited .= "{$key}: {$value}";
 				}
 				@Automate::factory()->log('R', " on {$villages[$village_id]['name']} with troops {$_troops_recruited}");
 			}
-		}	
+		}
 	}
 	sleep(rand(3,7));
 }
