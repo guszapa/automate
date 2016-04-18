@@ -215,21 +215,27 @@ switch ($action) {
 								<td>
 									<div class="block">
 										<!-- Own villages -->
-										<span>Own villages:</span>
-										<select name="<?=$village_id?>[to]">
-										<? foreach($villages['own'] as $_village_id => $village) : ?>
-											<? if ($village_id !== $_village_id) : ?>
-												<option value="<?=$_village_id?>"><?=$village['name']?></option>
-											<? endif; ?>
-										<? endforeach; ?>
-										</select>
+										<div class="block">
+											<span>Own villages:</span>
+											<select name="<?=$village_id?>[to]">
+											<? foreach($villages['own'] as $_village_id => $village) : ?>
+												<? if ($village_id !== $_village_id) : ?>
+													<option value="<?=$_village_id?>"><?=$village['name']?></option>
+												<? endif; ?>
+											<? endforeach; ?>
+											</select>
+										</div>
 										<!-- Allied villages -->
-										<span>Allied villages:</span>
-										<select name="<?=$village_id?>[to]">
-										<? foreach($villages['ally'] as $_village_id => $village) : ?>
-											<option value="<?=$_village_id?>"><?=$village['name']?></option>
-										<? endforeach; ?>
-										</select>
+										<? if (count($villages['ally']) > 0) : ?>
+										<div class="block">
+											<span>Allied villages:</span>
+											<select name="<?=$village_id?>[to]">
+											<? foreach($villages['ally'] as $_village_id => $village) : ?>
+												<option value="<?=$_village_id?>"><?=$village['name']?></option>
+											<? endforeach; ?>
+											</select>
+										</div>
+										<? endif; ?>
 									</div>
 									<div class="block">
 										<button type="submit" name="village_id" value="<?=$village_id?>">Add trade</button>
