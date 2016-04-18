@@ -219,6 +219,7 @@ switch ($action) {
 											<span>Own villages:</span>
 											<select name="<?=$village_id?>[to]">
 											<? foreach($villages['own'] as $_village_id => $village) : ?>
+												<option selected disabled>- Select a own village -</option>
 												<? if ($village_id !== $_village_id) : ?>
 													<option value="<?=$_village_id?>"><?=$village['name']?></option>
 												<? endif; ?>
@@ -231,6 +232,7 @@ switch ($action) {
 										<div class="block">
 											<span>Allied villages:</span>
 											<select name="<?=$village_id?>[to]">
+												<option selected disabled>- Select a allied village -</option>
 											<? foreach($villages['ally'] as $_village_id => $village) : ?>
 												<option value="<?=$_village_id?>"><?=$village['name']?></option>
 											<? endforeach; ?>
