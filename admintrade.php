@@ -224,6 +224,7 @@ switch ($action) {
 												<? endif; ?>
 											<? endforeach; ?>
 											</select>
+											<hr/>
 										</div>
 										<!-- Allied villages -->
 										<? if (isset($villages['ally']) && count($villages['ally']) > 0) : ?>
@@ -234,6 +235,7 @@ switch ($action) {
 												<option value="<?=$_village_id?>"><?=$village['name']?></option>
 											<? endforeach; ?>
 											</select>
+											<hr/>
 										</div>
 										<? endif; ?>
 									</div>
