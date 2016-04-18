@@ -22,9 +22,25 @@ $_trades = json_decode(Automate::factory()->getTrades(),TRUE);
 $_tradings = json_decode(Automate::factory()->getTradings(),TRUE);
 $_ownVillages = Automate::factory()->getVillages('own');
 $_allyVillages = Automate::factory()->getVillages('ally');
-$_villages = array_merge($_ownVillages, $_allyVillages);
+$_villages = Array();
+
+function mergeVillages(&$array1, &$array2) {
+	$merged = $array1;
+	foreach ( $array2 as $key => &$value ) {
+		if ( is_array ( $value ) && isset ( $merged [$key] ) && is_array ( $merged [$key] ) ) {
+	  		$merged [$key] = array_merge_recursive_distinct ( $merged [$key], $value );
+		} 
+		else {
+			$merged [$key] = $value;
+		}
+	}
+	return $merged;
+}
 
 if (count($_trades) > 0) {
+	// Merge villages
+	$_villages = mergeVillages($_ownVillages, $_allyVillages);
+
 	$now = time();
 	$data = is_array($_tradings) ? $_tradings : Array();
 	foreach($_trades as $key => $trade) {
