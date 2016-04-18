@@ -281,7 +281,15 @@ switch ($action) {
 								<? foreach ($trade as $key => $value) : ?>
 								<tr>
 									<td><?=$villages['own'][$value['from']]['name']?></td>
-									<td><?=$villages['own'][$value['to']]['name']?></td>
+									<td>
+										<? if ($villages['own'][$value['to']]) : ?>
+											<?=$villages['own'][$value['to']]['name']?>
+										<? elseif ($villages['ally'][$value['to']]) : ?>
+											<?=$villages['ally'][$value['to']]['name']?> <em>(Allied)</em>
+										<? else : ?>
+											Village with <b>ID <?=$value['id']?></b> does'nt exists.
+										<? endif; ?>
+									</td>
 									<td>
 										<? if ($editable && $key == $id) : ?>
 											<input type="text" class="span3" name="<?=$value['from']?>[stone]" value="<?=$value['stone']?>" placeholder="stone"/>
