@@ -20,7 +20,9 @@ $config = Automate::factory()->getConfig();
 $paths = Automate::factory()->getPaths();
 $_trades = json_decode(Automate::factory()->getTrades(),TRUE);
 $_tradings = json_decode(Automate::factory()->getTradings(),TRUE);
-$_villages = Automate::factory()->getVillages('own');
+$_ownVillages = Automate::factory()->getVillages('own');
+$_allyVillages = Automate::factory()->getVillages('ally');
+$_villages = array_merge($_ownVillages, $_allyVillages);
 
 if (count($_trades) > 0) {
 	$now = time();
