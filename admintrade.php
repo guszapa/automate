@@ -226,7 +226,7 @@ switch ($action) {
 											</select>
 										</div>
 										<!-- Allied villages -->
-										<? if (count($villages['ally']) > 0) : ?>
+										<? if (isset($villages['ally']) && count($villages['ally']) > 0) : ?>
 										<div class="block">
 											<span>Allied villages:</span>
 											<select name="<?=$village_id?>[to]">
