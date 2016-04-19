@@ -218,8 +218,8 @@ switch ($action) {
 										<div class="block">
 											<span>Own villages:</span>
 											<select name="<?=$village_id?>[to]">
-											<? foreach($villages['own'] as $_village_id => $village) : ?>
 												<option selected disabled>- Select a own village -</option>
+											<? foreach($villages['own'] as $_village_id => $village) : ?>
 												<? if ($village_id !== $_village_id) : ?>
 													<option value="<?=$_village_id?>"><?=$village['name']?></option>
 												<? endif; ?>
