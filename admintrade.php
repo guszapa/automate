@@ -64,14 +64,14 @@ switch ($action) {
         if ( !empty($_POST)) {
            if (isset($_POST['select']) && count($_POST['select']) > 0) {
               for($i=0; $i < count($_POST['select']); $i++) {
-				 $farms_json[$_POST['select'][$i]]['enabled'] = isset($_POST['enable']) ? 'true' : 'false';
+				 $trade[$_POST['select'][$i]]['enabled'] = isset($_POST['enable']) ? 'true' : 'false';
               }
-              if ($f = fopen($paths['farms'], 'w')) {
-                  fwrite($f, json_encode($farms_json));
+              if ($f = fopen($paths['trade'], 'w')) {
+                  fwrite($f, json_encode($trade));
                   fclose($f);
-                  $msg = "The changes have been saved. <a href='{$config['localhost']}adminfarms.php'>refresh page</a>";
+                  $msg = "The changes have been saved. <a href='{$config['localhost']}admintrade.php'>refresh page</a>";
               } else {
-                  Automate::factory()->log('E', "You don't have permission to write {$paths['farms']} file");
+                  Automate::factory()->log('E', "You don't have permission to write {$paths['trade']} file");
               }
            }
         }
@@ -131,7 +131,7 @@ switch ($action) {
                 });
                 // Confirm before delete
                 jQuery('.delete').on('click', function() {
-                		if (confirm('Are you sure to delete the trade selected?')) window.location.href = '<?=$config['localhost']?>' + jQuery(this).data('location');
+                	if (confirm('Are you sure to delete the trade selected?')) window.location.href = '<?=$config['localhost']?>' + jQuery(this).data('location');
                 });
             });
         </script>
@@ -171,7 +171,7 @@ switch ($action) {
 							<? $i = 0; ?>
 							<? foreach($villages['own'] as $village_id => $village) : ?>
 								<? if ($i === 0) $first_village_id = $village_id; ?>
-							<tr>
+							<tr class="<?=$class?>">
 								<td>
 									<a href="<?=$config['protocol']?>://<?=$config['server']?>.<?=$config['domain']?>/game.php?village=<?=$first_village_id.$config['info_village'].$village_id?>" target="_blank">
 									<?=$village_id?>
@@ -287,7 +287,7 @@ switch ($action) {
                 $editable = (isset($action) && isset($id)) && $action == 'edit';
 				$pos = 0;
                 ?>
-                <form action="<?=$config['localhost']?>admintrade.php?action=edit" name="trade" method="post">
+                <form action="<?=$config['localhost']?>admintrade.php?action=<?=($editable) ? 'edit' : 'disable'?>" name="trade" method="post">
 					<table class="farms">
 						<thead>
 							<tr>
@@ -307,7 +307,16 @@ switch ($action) {
 						<tbody>
 							<? if (!empty($trade)) : ?>
 								<? foreach ($trade as $key => $value) : ?>
-								<tr>
+								<?
+								if (isset($id) && $key == $id) :
+	                                  $class = 'selected';
+	                              elseif ($value['enabled'] == 'false') :
+	                                  $class = 'disabled';
+	                              else :
+	                                  $class = null;
+	                              endif;
+								?>
+								<tr class="<?=$class?>">
 									<td>
 										<input type="checkbox" class="chk" name="select[]" value="<?=$key?>"/>
 									</td>
