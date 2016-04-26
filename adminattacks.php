@@ -298,7 +298,7 @@ switch ($action) {
                     jQuery('table').find("input").val(0);
                     
                 });
-				// Confirm befrore delete
+				        // Confirm before delete
                 jQuery('.delete-all').on('click', function() {
                 		if (confirm('Are you sure to delete all schedulers?')) window.location.href = '<?=$config['localhost']?>' + jQuery(this).data('location');
                 });

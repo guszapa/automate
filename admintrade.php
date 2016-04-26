@@ -60,6 +60,22 @@ switch ($action) {
 			}
 		}
         break;
+    case 'disable': // OK
+        if ( !empty($_POST)) {
+           if (isset($_POST['select']) && count($_POST['select']) > 0) {
+              for($i=0; $i < count($_POST['select']); $i++) {
+				 $farms_json[$_POST['select'][$i]]['enabled'] = isset($_POST['enable']) ? 'true' : 'false';
+              }
+              if ($f = fopen($paths['farms'], 'w')) {
+                  fwrite($f, json_encode($farms_json));
+                  fclose($f);
+                  $msg = "The changes have been saved. <a href='{$config['localhost']}adminfarms.php'>refresh page</a>";
+              } else {
+                  Automate::factory()->log('E', "You don't have permission to write {$paths['farms']} file");
+              }
+           }
+        }
+        break;
 }
 /**
  * View
@@ -104,6 +120,18 @@ switch ($action) {
 				// Confirm before delete
                 jQuery('.delete-row').on('click', function() {
                 		if (confirm('¿Are you sure to delete this row?')) window.location.href = '<?=$config['localhost']?>' + jQuery(this).data('location');
+                });
+                // Select all/none farms
+                jQuery('#select-all').on('click', function(){
+                   if(jQuery(this).is(':checked')) {
+                      jQuery(".chk:checkbox:not(:checked)").attr("checked", "checked");
+                   } else {
+                      jQuery(".chk:checkbox:checked").removeAttr("checked");
+                   }
+                });
+                // Confirm before delete
+                jQuery('.delete').on('click', function() {
+                		if (confirm('Are you sure to delete the trade selected?')) window.location.href = '<?=$config['localhost']?>' + jQuery(this).data('location');
                 });
             });
         </script>
@@ -280,6 +308,9 @@ switch ($action) {
 							<? if (!empty($trade)) : ?>
 								<? foreach ($trade as $key => $value) : ?>
 								<tr>
+									<td>
+										<input type="checkbox" class="chk" name="select[]" value="<?=$key?>"/>
+									</td>
 									<td><?=$villages['own'][$value['from']]['name']?></td>
 									<td>
 										<? if (isset($villages['own'][$value['to']])) : ?>
@@ -342,13 +373,21 @@ switch ($action) {
                                           <input type="hidden" name="pos" value="<?=$pos?>"/>
 										  <input type="hidden" name="from" value="<?=$value['from']?>"/>
                                       <? else : ?>
-                                          <a href="<?=$config['localhost']?>admintrade.php?action=edit&id=<?=$pos?>#pos<?=$pos?>">Edit</a> | <a href="<?=$config['localhost']?>admintrade.php?action=delete&id=<?=$value['from']?>&pos=<?=$pos?>#pos<?=$pos?>" class="delete-row">Delete</a>
+                                          <a href="<?=$config['localhost']?>admintrade.php?action=edit&id=<?=$pos?>#pos<?=$pos?>">Edit</a> | 
+                                          <a data-location="admintrade.php?action=delete&id=<?=$value['from']?>&pos=<?=$pos?>#pos<?=$pos?>" class="delete-row delete">Delete</a>
                                       <? endif; ?>
                                   </td>
 								</tr>
 								<? $pos++ ?>
 								<? endforeach; ?>
 							<? endif; ?>
+							<tr style="border-top: 1px solid #ccc;">
+								<td><input id="select-all" type="checkbox"/></td>
+								<td colspan="9" style="text-align: left;">
+									Select all
+									<input type="submit" name="disable" value="disable"/> <input type="submit" name="enable" value="enable"/>
+								</td>
+							</tr>
 						</tbody>
 					</table>
                 </form>
