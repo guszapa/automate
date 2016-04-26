@@ -45,28 +45,33 @@ if (count($_trades) > 0) {
 	$data = is_array($_tradings) ? $_tradings : Array();
 	foreach($_trades as $key => $trade) {
 		if (isset($_tradings[$trade['id']])) {
-			// interval
-			if ($trade['method'] == 'interval') {
-				$end = strtotime("+{$trade['interval']} min", $_tradings[$trade['id']]['start']);
-				if ($now > $end) {
-					$data[$trade['id']] = $trade;
-					$data[$trade['id']]['x'] = $_villages[$trade['to']]['x']; // Add coords
-					$data[$trade['id']]['y'] = $_villages[$trade['to']]['y'];
-					$data[$trade['id']]['start'] = time(); // Add time start
-					unset($data[$trade['id']]['id'], $data[$trade['id']]['method'], $data[$trade['id']]['interval'], $data[$trade['id']]['lessthan'], $data[$trade['id']]['to']);
-					
-					$res = Automate::factory()->Trading($data[$trade['id']]); // Send trade
-					if (!$res) {
-						unset($data[$trade['id']]);
-						Automate::factory()->log('E', "The trading with ID {$trade['id']} wasn't sended");
+			// Check if has been disabled
+			if (!isset($trade['enabled']) || $trade['enabled'] == "true") {
+				// interval
+				if ($trade['method'] == 'interval') {
+					$end = strtotime("+{$trade['interval']} min", $_tradings[$trade['id']]['start']);
+					if ($now > $end) {
+						$data[$trade['id']] = $trade;
+						$data[$trade['id']]['x'] = $_villages[$trade['to']]['x']; // Add coords
+						$data[$trade['id']]['y'] = $_villages[$trade['to']]['y'];
+						$data[$trade['id']]['start'] = time(); // Add time start
+						unset($data[$trade['id']]['id'], $data[$trade['id']]['method'], $data[$trade['id']]['interval'], $data[$trade['id']]['lessthan'], $data[$trade['id']]['to']);
+						
+						$res = Automate::factory()->Trading($data[$trade['id']]); // Send trade
+						if (!$res) {
+							unset($data[$trade['id']]);
+							Automate::factory()->log('E', "The trading with ID {$trade['id']} wasn't sended");
+						} else {
+							Automate::factory()->log('T', "From {$_villages[$trade['from']]['name']} to {$_villages[$trade['to']]['name']} with: {$trade['stone']} | {$trade['wood']} | {$trade['iron']}");
+						}
 					} else {
-						Automate::factory()->log('T', "From {$_villages[$trade['from']]['name']} to {$_villages[$trade['to']]['name']} with: {$trade['stone']} | {$trade['wood']} | {$trade['iron']}");
+						continue;
 					}
 				} else {
-					continue;
+					// Less than
 				}
 			} else {
-				// Less than
+				Automate::factory()->log('E', "The trading with ID {$trade['id']} has been disabled.");
 			}
 		} else {
 			// New trade
