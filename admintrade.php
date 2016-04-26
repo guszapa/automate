@@ -310,7 +310,7 @@ switch ($action) {
 								<?
 								if (isset($id) && $key == $id) :
 	                                  $class = 'selected';
-	                              elseif ($value['enabled'] == 'false') :
+	                              elseif (isset($value['enabled']) && $value['enabled'] == 'false') :
 	                                  $class = 'disabled';
 	                              else :
 	                                  $class = null;
