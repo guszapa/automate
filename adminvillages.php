@@ -370,6 +370,9 @@ switch ($action) {
                         <li class="left <?=($mode == 'defense') ? 'selected' : NULL;?>">
                             <a href="<?=$config['localhost']?>adminvillages.php?mode=defense">Defense</a>
                         </li>
+                        <li class="left <?=($mode == 'static-defense') ? 'selected' : NULL;?>">
+                            <a href="<?=$config['localhost']?>adminvillages.php?mode=static-defense">Static defense</a>
+                        </li>
                         <li class="left <?=($mode == 'fake') ? 'selected' : NULL;?>">
                             <a href="<?=$config['localhost']?>adminvillages.php?mode=fake">Fake</a>
                         </li>
@@ -513,6 +516,9 @@ switch ($action) {
                                             </div>
                                             <div class="block">
                                                 <input type="checkbox" name="type[]" value="defense" <?=in_array('defense', $village['type']) ? 'checked="checked"' : null; ?>/>defense
+                                            </div>
+                                            <div class="block">
+                                                <input type="checkbox" name="type[]" value="static-defense" <?=in_array('static-defense', $village['type']) ? 'checked="checked"' : null; ?>/>static defense
                                             </div>
                                             <div class="block">
                                                 <input type="checkbox" name="type[]" value="spy" <?=in_array('spy', $village['type']) ? 'checked="checked"' : null; ?>/>spy

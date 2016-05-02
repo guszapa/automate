@@ -291,6 +291,7 @@ switch ($action) {
 					<table class="farms">
 						<thead>
 							<tr>
+								<th rowspan="2"></th>
 								<th rowspan="2">From</th>
 								<th rowspan="2">To</th>
 								<th colspan="3">Materials</th>
