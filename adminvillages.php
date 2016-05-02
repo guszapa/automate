@@ -6,6 +6,7 @@
  */
 include_once 'automate.class.php';
 $villages_json = Automate::factory()->getVillages();
+$buildings = json_decode(Automate::factory()->getBuildingsRules(), TRUE);
 $config = Automate::factory()->getConfig();
 $paths = Automate::factory()->getPaths();
 // get first village
@@ -156,6 +157,25 @@ switch ($action) {
              top: 0;
              left: 0;
              z-index: 1;
+          }
+          .title-bar {
+            font-size: 13px;
+            margin: 8px 0 4px 0;
+          }
+          .static-bar {
+            position: relative;
+            width: 250px;
+            height: 16px;
+            background-color: #eee;
+          }
+          .color-bar {
+            position: absolute;
+            top: 1px;
+            height: 90%;
+          }
+          .color-bar > span {
+            font-weight: bold;
+            color: #fff;
           }
         </style>
         <script type="text/javascript">
@@ -395,6 +415,67 @@ switch ($action) {
                 <!-- OWN VILLAGES -->
                 <? if ($mode=='dashboard') : ?>
                 <div>
+                <div class="block">
+                    <?
+                    $attackVillages = 0; $defenseVillages = 0; $spyVillages = 0; $totalVillages = 0; $totalTroopPoints = 45000;
+                    $attackTroops = 0; $defenseTroops = 0; $spyTroops = 0;
+                    foreach ($villages_own as $village_id => $village) {
+                        // The village troops type
+                        if ($village['type'] == 'attack' || $village['type'] == 'siege') $attackVillages ++;
+                        if ($village['type'] == 'defense' || $village['type'] == 'static-defense') $defenseVillages ++;
+                        if ($village['type'] == 'spy') $spyVillages ++;
+                        // Current troops
+                        foreach ($village['troops'] as $name => $troops) {
+                            if ($village['type'] == 'attack' || $village['type'] == 'siege') {
+                                $attackTroops += $troops * $buildings['troops'][$name]['settlers'];
+                            }
+                            if ($village['type'] == 'defense' || $village['type'] == 'static-defense') {
+                                $defenseTroops += $troops * $buildings['troops'][$name]['settlers'];
+                            }
+                            if ($village['type'] == 'spy') {
+                                $spyTroops += $troops * $buildings['troops'][$name]['settlers'];
+                            }
+                        }
+                        $totalVillages++;
+                    }
+                    // The village troops type
+                    $attackPercent = round((($attackVillages * 100)/$totalVillages),1);
+                    $defensePercent = round((($defenseVillages * 100)/$totalVillages),1);
+                    $spyPercent = round((($spyVillages * 100)/$totalVillages),1);
+                    // Current troops
+                    $attackTroopsPercent =  round((($attackTroops * 100)/($totalTroopPoints*$attackVillages)), 1);
+                    $defenseTroopsPercent =  round((($defenseTroops * 100)/($totalTroopPoints*$defenseVillages)), 1);
+                    $spyTroopsPercent =  round((($spyTroops * 100)/($totalTroopPoints*$spyVillages)), 1);
+                    ?>
+                    <div class="inline">
+                        <div class="block" class="title-bar">The village troops type</div>
+                        <div class="block" class="static-bar">
+                            <div class="inline" class="color-bar" style="left: 0; width: <?=$attackPercent?>%; background-color: orange">
+                                <span><?=$attackPercent?>% attack</span>
+                            </div>
+                            <div class="inline" style="left: <?=$defensePercent?>%; width: <?=$defensePercent?>%; background-color: green">
+                                <span><?=$defensePercent?>% defense</span>
+                            </div>
+                            <div class="inline" style="left: <?=$spyPercent?>%; width: <?=$spyPercent?>%; background-color: blue">
+                                <span><?=$spyPercent?>% spy</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inline">
+                        <div class="block" class="title-bar">Current troops %</div>
+                        <div class="block" class="static-bar">
+                            <div class="inline" class="color-bar" style="left: 0; width: <?=$attackTroopsPercent?>%; background-color: orange">
+                                <span><?=$attackTroopsPercent?>% attack</span>
+                            </div>
+                            <div class="inline" style="left: <?=$attackTroopsPercent?>%; width: <?=$defenseTroopsPercent?>%; background-color: green">
+                                <span><?=$defenseTroopsPercent?>% defense</span>
+                            </div>
+                            <div class="inline" style="left: <?=$attackTroopsPercent + $defenseTroopsPercent?>%; width: <?=$spyTroopsPercent?>%; background-color: blue">
+                                <span><?=$spyTroopsPercent?>% spy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <table class="farms">
                   <thead>
                     <tr>
