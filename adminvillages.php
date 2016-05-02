@@ -451,8 +451,8 @@ switch ($action) {
                     $spyTroopsPercent = ($spyTroops > 0) ? round((($spyTroops * 100)/($totalTroopPoints*$spyVillages)), 1) : 0;
                     ?>
                     <div class="inline">
-                        <div class="block" class="title-bar">The village troops type</div>
-                        <div class="block" class="static-bar">
+                        <div class="block title-bar">The village troops type</div>
+                        <div class="block static-bar">
                             <? if ($attackPercent > 0) : ?>
                             <div class="inline color-bar" style="left: 0; width: <?=$attackPercent?>%; background-color: orange">
                                 <span><?=$attackPercent?>% attack</span>
@@ -471,8 +471,8 @@ switch ($action) {
                         </div>
                     </div>
                     <div class="inline">
-                        <div class="block" class="title-bar">Current troops %</div>
-                        <div class="block" class="static-bar">
+                        <div class="block title-bar">Current troops %</div>
+                        <div class="block static-bar">
                             <? if ($attackTroopsPercent > 0) : ?>
                             <div class="inline color-bar" style="left: 0; width: <?=$attackTroopsPercent?>%; background-color: orange">
                                 <span><?=$attackTroopsPercent?>% attack</span>
