@@ -419,7 +419,7 @@ switch ($action) {
                     <?
                     $attackVillages = 0; $defenseVillages = 0; $spyVillages = 0; $totalVillages = 0; $totalTroopPoints = 45000;
                     $attackTroops = 0; $defenseTroops = 0; $spyTroops = 0;
-                    foreach ($villages_own as $village_id => $village) {
+                    foreach ($villages_json['own'] as $village_id => $village) {
                         // The village troops type
                         if ($village['type'] == 'attack' || $village['type'] == 'siege') $attackVillages ++;
                         if ($village['type'] == 'defense' || $village['type'] == 'static-defense') $defenseVillages ++;
