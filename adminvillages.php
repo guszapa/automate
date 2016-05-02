@@ -174,10 +174,12 @@ switch ($action) {
             height: 90%;
           }
           .color-bar > span {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             font-weight: bold;
             font-size: 12px;
             line-height: 16px;
-            padding: 0 2px;
             text-align: center;
             color: #fff;
           }
