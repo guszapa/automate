@@ -56,6 +56,8 @@ function numberRecruit(&$data, &$rules, &$troops, $troop) {
 		$_recruit = $_troopsRecruitable > $troops[$troop] ? $troops[$troop] : $_troopsRecruitable;
 		$_required_settelers = $rules['troops'][$troop]['settlers'] * $_recruit;
 		$_recruitable = (int)$data['settlers'] > $_required_settelers ? $_recruit : floor($data['settlers']/$rules['troops'][$troop]['settlers']);
+		// Reduce a 10% on recruitable troops
+		$_recruitable = floor($_recruitable - ($_recruitable*0.01));
 		// Reduce materials
 		$data['materials']['stone'] -= $_recruitable*$rules['troops'][$troop]['materials']['stone'];
 		$data['materials']['wood'] -= $_recruitable*$rules['troops'][$troop]['materials']['wood'];
