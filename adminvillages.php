@@ -421,18 +421,18 @@ switch ($action) {
                     $attackTroops = 0; $defenseTroops = 0; $spyTroops = 0;
                     foreach ($villages_json['own'] as $village_id => $village) {
                         // The village troops type
-                        if ($village['type'] == 'attack' || $village['type'] == 'siege') $attackVillages ++;
-                        if ($village['type'] == 'defense' || $village['type'] == 'static-defense') $defenseVillages ++;
-                        if ($village['type'] == 'spy') $spyVillages ++;
+                        if (in_array('attack', $village['type']) || in_array('siege', $village['type'])) $attackVillages++;
+                        if (in_array('defense', $village['type']) || in_array('static-defense', $village['type'])) $defenseVillages++;
+                        if (in_array('spy', $village['type'])) $spyVillages++;
                         // Current troops
                         foreach ($village['troops'] as $name => $troops) {
-                            if ($village['type'] == 'attack' || $village['type'] == 'siege') {
+                            if (in_array('attack', $village['type']) || in_array('siege', $village['type'])) {
                                 $attackTroops += $troops * $buildings['troops'][$name]['settlers'];
                             }
-                            if ($village['type'] == 'defense' || $village['type'] == 'static-defense') {
+                            if (in_array('defense', $village['type']) || in_array('static-defense', $village['type'])) {
                                 $defenseTroops += $troops * $buildings['troops'][$name]['settlers'];
                             }
-                            if ($village['type'] == 'spy') {
+                            if (in_array('spy', $village['type'])) {
                                 $spyTroops += $troops * $buildings['troops'][$name]['settlers'];
                             }
                         }
