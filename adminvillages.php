@@ -175,6 +175,9 @@ switch ($action) {
           }
           .color-bar > span {
             font-weight: bold;
+            font-size: 12px;
+            line-height: 16px;
+            text-align: center;
             color: #fff;
           }
         </style>
@@ -439,40 +442,52 @@ switch ($action) {
                         $totalVillages++;
                     }
                     // The village troops type
-                    $attackPercent = round((($attackVillages * 100)/$totalVillages),1);
-                    $defensePercent = round((($defenseVillages * 100)/$totalVillages),1);
-                    $spyPercent = round((($spyVillages * 100)/$totalVillages),1);
+                    $attackPercent = ($attackVillages > 0) ? round((($attackVillages * 100)/$totalVillages),1) : 0;
+                    $defensePercent = ($defenseVillages > 0) ? round((($defenseVillages * 100)/$totalVillages),1) : 0;
+                    $spyPercent = ($spyVillages > 0) ? round((($spyVillages * 100)/$totalVillages),1) : 0;
                     // Current troops
-                    $attackTroopsPercent =  round((($attackTroops * 100)/($totalTroopPoints*$attackVillages)), 1);
-                    $defenseTroopsPercent =  round((($defenseTroops * 100)/($totalTroopPoints*$defenseVillages)), 1);
-                    $spyTroopsPercent =  round((($spyTroops * 100)/($totalTroopPoints*$spyVillages)), 1);
+                    $attackTroopsPercent = ($attackTroops > 0) ? round((($attackTroops * 100)/($totalTroopPoints*$attackVillages)), 1) : 0;
+                    $defenseTroopsPercent = ($defenseTroops > 0) ? round((($defenseTroops * 100)/($totalTroopPoints*$defenseVillages)), 1) : 0;
+                    $spyTroopsPercent = ($spyTroops > 0) ? round((($spyTroops * 100)/($totalTroopPoints*$spyVillages)), 1) : 0;
                     ?>
                     <div class="inline">
                         <div class="block" class="title-bar">The village troops type</div>
                         <div class="block" class="static-bar">
-                            <div class="inline" class="color-bar" style="left: 0; width: <?=$attackPercent?>%; background-color: orange">
+                            <? if ($attackPercent > 0) : ?>
+                            <div class="inline color-bar" style="left: 0; width: <?=$attackPercent?>%; background-color: orange">
                                 <span><?=$attackPercent?>% attack</span>
                             </div>
-                            <div class="inline" style="left: <?=$defensePercent?>%; width: <?=$defensePercent?>%; background-color: green">
+                            <? endif; ?>
+                            <? if ($defensePercent > 0) : ?>
+                            <div class="inline color-bar" style="left: <?=$defensePercent?>%; width: <?=$defensePercent?>%; background-color: green">
                                 <span><?=$defensePercent?>% defense</span>
                             </div>
-                            <div class="inline" style="left: <?=$spyPercent?>%; width: <?=$spyPercent?>%; background-color: blue">
+                            <? endif; ?>
+                            <? if ($spyPercent > 0) : ?>
+                            <div class="inline color-bar" style="left: <?=$spyPercent?>%; width: <?=$spyPercent?>%; background-color: blue">
                                 <span><?=$spyPercent?>% spy</span>
                             </div>
+                            <? endif; ?>
                         </div>
                     </div>
                     <div class="inline">
                         <div class="block" class="title-bar">Current troops %</div>
                         <div class="block" class="static-bar">
-                            <div class="inline" class="color-bar" style="left: 0; width: <?=$attackTroopsPercent?>%; background-color: orange">
+                            <? if ($attackTroopsPercent > 0) : ?>
+                            <div class="inline color-bar" style="left: 0; width: <?=$attackTroopsPercent?>%; background-color: orange">
                                 <span><?=$attackTroopsPercent?>% attack</span>
                             </div>
-                            <div class="inline" style="left: <?=$attackTroopsPercent?>%; width: <?=$defenseTroopsPercent?>%; background-color: green">
+                            <? endif; ?>
+                            <? if ($defenseTroopsPercent > 0) : ?>
+                            <div class="inline color-bar" style="left: <?=$attackTroopsPercent?>%; width: <?=$defenseTroopsPercent?>%; background-color: green">
                                 <span><?=$defenseTroopsPercent?>% defense</span>
                             </div>
-                            <div class="inline" style="left: <?=$attackTroopsPercent + $defenseTroopsPercent?>%; width: <?=$spyTroopsPercent?>%; background-color: blue">
+                            <? endif; ?>
+                            <? if ($spyTroopsPercent > 0) : ?>
+                            <div class="inline color-bar" style="left: <?=$attackTroopsPercent + $defenseTroopsPercent?>%; width: <?=$spyTroopsPercent?>%; background-color: blue">
                                 <span><?=$spyTroopsPercent?>% spy</span>
                             </div>
+                            <? endif; ?>
                         </div>
                     </div>
                 </div>
