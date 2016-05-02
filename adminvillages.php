@@ -427,13 +427,13 @@ switch ($action) {
                         // Current troops
                         foreach ($village['troops'] as $name => $troops) {
                             if (in_array('attack', $village['type']) || in_array('siege', $village['type'])) {
-                                $attackTroops += $troops * $buildings['troops'][$name]['settlers'];
+                                if (isset($buildings['troops'][$name])) $attackTroops += $troops * $buildings['troops'][$name]['settlers'];
                             }
                             if (in_array('defense', $village['type']) || in_array('static-defense', $village['type'])) {
-                                $defenseTroops += $troops * $buildings['troops'][$name]['settlers'];
+                                if (isset($buildings['troops'][$name])) $defenseTroops += $troops * $buildings['troops'][$name]['settlers'];
                             }
                             if (in_array('spy', $village['type'])) {
-                                $spyTroops += $troops * $buildings['troops'][$name]['settlers'];
+                                if (isset($buildings['troops'][$name])) $spyTroops += $troops * $buildings['troops'][$name]['settlers'];
                             }
                         }
                         $totalVillages++;
