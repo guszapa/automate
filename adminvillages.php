@@ -165,7 +165,7 @@ switch ($action) {
           .static-bar {
             position: relative;
             width: 250px;
-            height: 16px;
+            height: 18px;
             background-color: #eee;
           }
           .color-bar {
@@ -177,6 +177,7 @@ switch ($action) {
             font-weight: bold;
             font-size: 12px;
             line-height: 16px;
+            padding: 0 2px;
             text-align: center;
             color: #fff;
           }
@@ -450,7 +451,7 @@ switch ($action) {
                     $defenseTroopsPercent = ($defenseTroops > 0) ? round((($defenseTroops * 100)/($totalTroopPoints*$defenseVillages)), 1) : 0;
                     $spyTroopsPercent = ($spyTroops > 0) ? round((($spyTroops * 100)/($totalTroopPoints*$spyVillages)), 1) : 0;
                     ?>
-                    <div class="inline">
+                    <div class="inlineblock">
                         <div class="block title-bar">The village troops type</div>
                         <div class="block static-bar">
                             <? if ($attackPercent > 0) : ?>
@@ -459,18 +460,18 @@ switch ($action) {
                             </div>
                             <? endif; ?>
                             <? if ($defensePercent > 0) : ?>
-                            <div class="inline color-bar" style="left: <?=$defensePercent?>%; width: <?=$defensePercent?>%; background-color: green">
+                            <div class="inline color-bar" style="left: <?=$attackPercent?>%; width: <?=$defensePercent?>%; background-color: green">
                                 <span><?=$defensePercent?>% defense</span>
                             </div>
                             <? endif; ?>
                             <? if ($spyPercent > 0) : ?>
-                            <div class="inline color-bar" style="left: <?=$spyPercent?>%; width: <?=$spyPercent?>%; background-color: blue">
+                            <div class="inline color-bar" style="left: <?=$attackPercent + $defensePercent?>%; width: <?=$spyPercent?>%; background-color: blue">
                                 <span><?=$spyPercent?>% spy</span>
                             </div>
                             <? endif; ?>
                         </div>
                     </div>
-                    <div class="inline">
+                    <div class="inlineblock" style="margin-left: 16px">
                         <div class="block title-bar">Current troops %</div>
                         <div class="block static-bar">
                             <? if ($attackTroopsPercent > 0) : ?>
