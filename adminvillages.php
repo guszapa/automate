@@ -473,26 +473,35 @@ switch ($action) {
                             <? endif; ?>
                         </div>
                     </div>
+                    <? if ($attackTroopsPercent > 0) : ?>
                     <div class="inlineblock" style="margin-left: 16px">
-                        <div class="block title-bar">Current troops %</div>
+                        <div class="block title-bar">Current attack troops</div>
                         <div class="block static-bar">
-                            <? if ($attackTroopsPercent > 0) : ?>
                             <div class="inline color-bar" style="left: 0; width: <?=$attackTroopsPercent?>%; background-color: orange">
                                 <span><?=$attackTroopsPercent?>% attack</span>
                             </div>
-                            <? endif; ?>
-                            <? if ($defenseTroopsPercent > 0) : ?>
+                        </div>
+                    </div>
+                    <? endif; ?>
+                    <? if ($defenseTroopsPercent > 0) : ?>
+                    <div class="inlineblock" style="margin-left: 16px">
+                        <div class="block title-bar">Current defense troops</div>
+                        <div class="block static-bar">
                             <div class="inline color-bar" style="left: <?=$attackTroopsPercent?>%; width: <?=$defenseTroopsPercent?>%; background-color: green">
                                 <span><?=$defenseTroopsPercent?>% defense</span>
                             </div>
-                            <? endif; ?>
-                            <? if ($spyTroopsPercent > 0) : ?>
+                        </div>
+                    </div>
+                    <? endif; ?>
+                    <? if ($spyTroopsPercent > 0) : ?>
+                    <div class="inlineblock" style="margin-left: 16px">
+                        <div class="block title-bar">Current spy troops</div>
                             <div class="inline color-bar" style="left: <?=$attackTroopsPercent + $defenseTroopsPercent?>%; width: <?=$spyTroopsPercent?>%; background-color: blue">
                                 <span><?=$spyTroopsPercent?>% spy</span>
                             </div>
-                            <? endif; ?>
                         </div>
                     </div>
+                    <? endif; ?>
                 </div>
                 <table class="farms">
                   <thead>
