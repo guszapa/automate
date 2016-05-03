@@ -141,7 +141,7 @@ switch ($action) {
           #a_add_enemies, #a_add_allied { float: right; clear: right; }
           #a_del_enemies, #a_del_allied { float: left; clear: left; }
           table tbody tr.footer { background-color: #eee; }
-          table tbody tr td.image { max-width: 300px; }
+          table tbody tr td.image { max-width: 200px; }
           table tbody tr td.image div {
              max-height: 180px;
              overflow: hidden;
