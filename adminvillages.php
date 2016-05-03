@@ -487,7 +487,7 @@ switch ($action) {
                     <div class="inlineblock" style="margin-left: 16px">
                         <div class="block title-bar">Current defense troops</div>
                         <div class="block static-bar">
-                            <div class="inline color-bar" style="left: <?=$attackTroopsPercent?>%; width: <?=$defenseTroopsPercent?>%; background-color: green">
+                            <div class="inline color-bar" style="left: 0; width: <?=$defenseTroopsPercent?>%; background-color: green">
                                 <span><?=$defenseTroopsPercent?>% defense</span>
                             </div>
                         </div>
@@ -496,7 +496,7 @@ switch ($action) {
                     <? if ($spyTroopsPercent > 0) : ?>
                     <div class="inlineblock" style="margin-left: 16px">
                         <div class="block title-bar">Current spy troops</div>
-                            <div class="inline color-bar" style="left: <?=$attackTroopsPercent + $defenseTroopsPercent?>%; width: <?=$spyTroopsPercent?>%; background-color: blue">
+                            <div class="inline color-bar" style="left: 0; width: <?=$spyTroopsPercent?>%; background-color: blue">
                                 <span><?=$spyTroopsPercent?>% spy</span>
                             </div>
                         </div>
