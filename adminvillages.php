@@ -496,6 +496,7 @@ switch ($action) {
                     <? if ($spyTroopsPercent > 0) : ?>
                     <div class="inlineblock" style="margin-left: 16px">
                         <div class="block title-bar">Current spy troops</div>
+                        <div class="block static-bar">
                             <div class="inline color-bar" style="left: 0; width: <?=$spyTroopsPercent?>%; background-color: blue">
                                 <span><?=$spyTroopsPercent?>% spy</span>
                             </div>
