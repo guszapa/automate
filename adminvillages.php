@@ -116,6 +116,37 @@ switch ($action) {
           echo 'sort';
          break;
 }
+// Generate troop stats
+$attackVillages = 0; $defenseVillages = 0; $spyVillages = 0; $totalVillages = 0; $totalTroopPoints = 45000;
+$attackTroops = 0; $defenseTroops = 0; $spyTroops = 0;
+foreach ($villages_json['own'] as $village_id => $village) {
+    // The village troops type
+    if (in_array('attack', $village['type']) || in_array('siege', $village['type'])) $attackVillages++;
+    if (in_array('defense', $village['type']) || in_array('static-defense', $village['type'])) $defenseVillages++;
+    if (in_array('spy', $village['type'])) $spyVillages++;
+    // Current troops
+    foreach ($village['troops'] as $name => $troops) {
+        if (in_array('attack', $village['type']) || in_array('siege', $village['type'])) {
+            if (isset($buildings['troops'][$name])) $attackTroops += $troops * $buildings['troops'][$name]['settlers'];
+        }
+        if (in_array('defense', $village['type']) || in_array('static-defense', $village['type'])) {
+            if (isset($buildings['troops'][$name])) $defenseTroops += $troops * $buildings['troops'][$name]['settlers'];
+        }
+        if (in_array('spy', $village['type'])) {
+            if (isset($buildings['troops'][$name])) $spyTroops += $troops * $buildings['troops'][$name]['settlers'];
+        }
+    }
+    $totalVillages++;
+}
+// The village troops type
+$attackPercent = ($attackVillages > 0) ? round((($attackVillages * 100)/$totalVillages),1) : 0;
+$defensePercent = ($defenseVillages > 0) ? round((($defenseVillages * 100)/$totalVillages),1) : 0;
+$spyPercent = ($spyVillages > 0) ? round((($spyVillages * 100)/$totalVillages),1) : 0;
+// Current troops
+$attackTroopsPercent = ($attackTroops > 0) ? round((($attackTroops * 100)/($totalTroopPoints*$attackVillages)), 1) : 0;
+$defenseTroopsPercent = ($defenseTroops > 0) ? round((($defenseTroops * 100)/($totalTroopPoints*$defenseVillages)), 1) : 0;
+$spyTroopsPercent = ($spyTroops > 0) ? round((($spyTroops * 100)/($totalTroopPoints*$spyVillages)), 1) : 0;
+
 /**
  * View
  */
@@ -422,37 +453,6 @@ switch ($action) {
                 <? if ($mode=='dashboard') : ?>
                 <div>
                 <div class="block">
-                    <?
-                    $attackVillages = 0; $defenseVillages = 0; $spyVillages = 0; $totalVillages = 0; $totalTroopPoints = 45000;
-                    $attackTroops = 0; $defenseTroops = 0; $spyTroops = 0;
-                    foreach ($villages_json['own'] as $village_id => $village) {
-                        // The village troops type
-                        if (in_array('attack', $village['type']) || in_array('siege', $village['type'])) $attackVillages++;
-                        if (in_array('defense', $village['type']) || in_array('static-defense', $village['type'])) $defenseVillages++;
-                        if (in_array('spy', $village['type'])) $spyVillages++;
-                        // Current troops
-                        foreach ($village['troops'] as $name => $troops) {
-                            if (in_array('attack', $village['type']) || in_array('siege', $village['type'])) {
-                                if (isset($buildings['troops'][$name])) $attackTroops += $troops * $buildings['troops'][$name]['settlers'];
-                            }
-                            if (in_array('defense', $village['type']) || in_array('static-defense', $village['type'])) {
-                                if (isset($buildings['troops'][$name])) $defenseTroops += $troops * $buildings['troops'][$name]['settlers'];
-                            }
-                            if (in_array('spy', $village['type'])) {
-                                if (isset($buildings['troops'][$name])) $spyTroops += $troops * $buildings['troops'][$name]['settlers'];
-                            }
-                        }
-                        $totalVillages++;
-                    }
-                    // The village troops type
-                    $attackPercent = ($attackVillages > 0) ? round((($attackVillages * 100)/$totalVillages),1) : 0;
-                    $defensePercent = ($defenseVillages > 0) ? round((($defenseVillages * 100)/$totalVillages),1) : 0;
-                    $spyPercent = ($spyVillages > 0) ? round((($spyVillages * 100)/$totalVillages),1) : 0;
-                    // Current troops
-                    $attackTroopsPercent = ($attackTroops > 0) ? round((($attackTroops * 100)/($totalTroopPoints*$attackVillages)), 1) : 0;
-                    $defenseTroopsPercent = ($defenseTroops > 0) ? round((($defenseTroops * 100)/($totalTroopPoints*$defenseVillages)), 1) : 0;
-                    $spyTroopsPercent = ($spyTroops > 0) ? round((($spyTroops * 100)/($totalTroopPoints*$spyVillages)), 1) : 0;
-                    ?>
                     <div class="inlineblock">
                         <div class="block title-bar">The village troops type</div>
                         <div class="block static-bar">
@@ -905,9 +905,50 @@ switch ($action) {
                 <!-- END ALLY VILLAGES -->
                 <? endif; ?>
 
-                <!-- MODES VILLAGES -->
+                <!-- 
+
+                    MODES VILLAGES
+                    
+                -->
                 <? if ($mode!='dashboard' && $mode!='enemies' && $mode!='allies') : ?>
                 <div>
+
+                <!-- Attack stats -->
+                <? if (($mode == 'attack' || $mode == 'siege') && $attackTroopsPercent > 0) : ?>
+                <div class="inlineblock" style="margin-left: 16px">
+                    <div class="block title-bar">Current attack troops</div>
+                    <div class="block static-bar">
+                        <div class="inline color-bar" style="left: 0; width: <?=$attackTroopsPercent?>%; background-color: orange">
+                            <span><?=$attackTroopsPercent?>% attack</span>
+                        </div>
+                    </div>
+                </div>
+                <? endif; ?>
+
+                <!-- Defense stats -->
+                <? if (($mode == 'defense' || $mode == 'static-defense') && $defenseTroopsPercent > 0) : ?>
+                <div class="inlineblock" style="margin-left: 16px">
+                    <div class="block title-bar">Current defense troops</div>
+                    <div class="block static-bar">
+                        <div class="inline color-bar" style="left: 0; width: <?=$defenseTroopsPercent?>%; background-color: green">
+                            <span><?=$defenseTroopsPercent?>% defense</span>
+                        </div>
+                    </div>
+                </div>
+                <? endif; ?>
+
+                <!-- Spy stats -->
+                <? if ($mode == 'spy' && $spyTroopsPercent > 0) : ?>
+                <div class="inlineblock" style="margin-left: 16px">
+                    <div class="block title-bar">Current spy troops</div>
+                    <div class="block static-bar">
+                        <div class="inline color-bar" style="left: 0; width: <?=$spyTroopsPercent?>%; background-color: blue">
+                            <span><?=$spyTroopsPercent?>% spy</span>
+                        </div>
+                    </div>
+                </div>
+                <? endif; ?>
+
                 <table class="farms">
                   <thead>
                     <tr>
