@@ -117,10 +117,6 @@ switch ($action) {
                         jQuery('#modalbox').css('display', 'none'); jQuery('#new_trade').css('display', 'none');
                     }
                 });
-				// Confirm before delete
-                jQuery('.delete-row').on('click', function() {
-                		if (confirm('¿Are you sure to delete this row?')) window.location.href = '<?=$config['localhost']?>' + jQuery(this).data('location');
-                });
                 // Select all/none farms
                 jQuery('#select-all').on('click', function(){
                    if(jQuery(this).is(':checked')) {
