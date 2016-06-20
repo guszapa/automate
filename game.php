@@ -8,7 +8,7 @@ $config = Automate::factory()->getConfig();
 $url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php";
 $output = '';
 
-$output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST);
+$output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST, true, false);
 ?>
 <!DOCTYPE html>
 <html lang="en">
