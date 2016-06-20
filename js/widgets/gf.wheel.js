@@ -38,6 +38,7 @@ $.widget('gf.wheel', {
     },
 
     _create: function(){
+        $('#rotateButton').show();
         this._info = {};
     },
 
