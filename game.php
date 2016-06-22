@@ -6,9 +6,6 @@
 include_once(dirname(__FILE__).'/automate.class.php'); // parent
 $config = Automate::factory()->getConfig();
 $url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php";
-$output = '';
-
-$output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST, true, false);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,6 +62,6 @@ $output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST
     }
   </style>
   <body style="background-color: #111;">
-    <?=print_r($output)?>
+    <?= Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST, true, false); ?>
   </body>
 </html>
