@@ -57,6 +57,9 @@ $url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php
       opacity: 0.8 !important;
       background: none !important;
     }
+    #main_content * { 
+      background-image:none !important;
+    }
     #banner_container {
       display: none !important;
     }
