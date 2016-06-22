@@ -30,11 +30,14 @@ $output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST
     }
 
     a, a:visited, a:link {
-      color: #eee;
-      text-decoration: underline;
+      color: #f3f3f3 !important;
+      text-decoration: underline !important;
     }
-    .quickstart_pane a {
-      font-size:12px;
+    .shortcut-element a, .quickstart_pane a {
+      font-size: 12px !important;
+    }
+    input {
+      color: #222 !important;
     }
   </style>
   <body style="background-color: #444;">
