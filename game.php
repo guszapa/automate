@@ -18,11 +18,20 @@ $output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST
       <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
       <title>Game</title>
   </head>
+  <style type="text/css">
+    * {
+      background-color: #222;
+      background-image: none;
+    }
+    img {
+      opacity: 0.4;
+    }
+
+    a, a:visited, a:link {
+      color: #ccc !important;
+    }
+  </style>
   <body style="background-color: #444;">
     <?=print_r($output)?>
-    <br>
-    <h4>
-      <a href="<?=$config['localhost']?>game.php">Back</a>
-    </h4>
   </body>
 </html>
