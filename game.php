@@ -49,6 +49,9 @@ $output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST
      #map img, #minimap img {
       opacity: 0.8 !important;
     }
+    #minimap {
+      background: none !important;
+    }
   </style>
   <body style="background-color: #444;">
     <?=print_r($output)?>
