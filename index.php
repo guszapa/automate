@@ -243,9 +243,9 @@ switch ($action) {
 					</a>
 				</li>
         <li class="left">
-          <a href="<?=$config['localhost']?>messages.php" class="left">
+          <a href="<?=$config['localhost']?>game.php" class="left">
             <img src="<?=$config['localhost']?>media/img/messages.png"/><br/>
-            Messages
+            Game access
           </a>
         </li>
 				<li class="left">
