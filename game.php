@@ -60,9 +60,11 @@ $output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST
       opacity: 0.8 !important;
       background: none !important;
     }
+    #banner_container {
+      display: none !important;
+    }
   </style>
   <body style="background-color: #111;">
     <?=print_r($output)?>
-    $('#rotateButton').removeClass('disabled');
   </body>
 </html>
