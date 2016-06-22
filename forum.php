@@ -18,11 +18,50 @@ $output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST
       <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
       <title>Game</title>
   </head>
-  <body style="background-color: #444;">
+  <style type="text/css">
+    * {
+      background-color: #111;
+      background-image: none !important;
+      color:#ccc;
+      font-size:11px;
+    }
+    img {
+      opacity: 0.4;
+    }
+
+    a, a:visited, a:link {
+      color: #f3f3f3 !important;
+      text-decoration: underline !important;
+    }
+    .shortcut-element a, .quickstart_pane a {
+      font-size: 12px !important;
+    }
+    input {
+      color: #222 !important;
+    }
+    .background {
+      display: none;
+    }
+    .click {
+      color: #fff !important;
+      text-decoration: underline !important;
+    }
+    #map th {
+      color: #111;
+    }
+    #map td {
+      color: #333; 
+    }
+    .map_colors td {
+      color: #eee !important;
+      font-size: 0.95em !important;
+    }
+    #map img, #minimap img {
+      opacity: 0.8 !important;
+      background: none !important;
+    }
+  </style>
+  <body style="background-color: #111;">
     <?=print_r($output)?>
-    <br>
-    <h4>
-      <a href="<?=$config['localhost']?>forum.php">Back</a>
-    </h4>
   </body>
 </html>
