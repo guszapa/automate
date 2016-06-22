@@ -19,7 +19,7 @@ $output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST
       <title>Game</title>
   </head>
   <style type="text/css">
-    * {
+    html {
       background-color: #111;
       background-image: none !important;
       color:#ccc;
