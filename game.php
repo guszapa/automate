@@ -21,7 +21,7 @@ $output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST
   <style type="text/css">
     * {
       background-color: #111;
-      background-image: none;
+      background-image: none !important;
       color:#ccc;
       font-size:11px;
     }
@@ -38,6 +38,13 @@ $output = Automate::factory()->getGame($url.'?'.$_SERVER['QUERY_STRING'], $_POST
     }
     input {
       color: #222 !important;
+    }
+    .background {
+      display: none;
+    }
+    .click {
+      color: #fff !important;
+      text-decoration: underline !important;
     }
   </style>
   <body style="background-color: #444;">
