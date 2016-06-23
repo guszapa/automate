@@ -1231,8 +1231,21 @@ class Automate {
             curl_setopt($curl, CURLOPT_ENCODING, 'gzip,deflate'); // Decoding response
       }
       if ( !is_null($data) && !empty($data)) {
-         curl_setopt($curl, CURLOPT_POST, TRUE); // Send a post request
-         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        // Parser array values to string conversion
+        $data_parsed = array();
+        foreach($data as $key => $value) {
+          if (is_array($value)) {
+            for($i = 0; $i < count($value); $i++){
+              $data_parsed["{$key}[{$i}]"] = $value[$i];
+            }
+          } else {
+            $data_parsed[$key] = $value;
+          }
+        }
+        // End parser
+
+        curl_setopt($curl, CURLOPT_POST, TRUE); // Send a post request
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_parsed);
       } else {
          curl_setopt($curl, CURLOPT_HTTPGET, TRUE);
       }
