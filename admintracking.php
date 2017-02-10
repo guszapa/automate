@@ -199,6 +199,7 @@ switch ($action) {
                           <th>Player Name</th>
                           <th>Aliance (position)</th>
                           <th>Total points</th>
+                          <th>Troop points</th>
                           <th>Position</th>
                           <th>Villages</th>
                           <th>Average points</th>
@@ -209,8 +210,19 @@ switch ($action) {
                       </thead>
                       <tbody>
                         <? if (is_array($tracks) && count($tracks) > 0) : ?>
+                          <? $alliance_troops = 0; ?>
                           <? foreach ($tracks as $track) : ?>
                             <? foreach ($track as $player_id => $data) : ?>
+                                <? // Get the user village points
+                                  $village_points = 0;
+                                  foreach($data['villages'] as $village) :
+                                    $village_points += (int)$village['points'];
+                                  endforeach;
+                                  // Calculate user troop points
+                                  $player_troops = ($data['total_points'] - (($data['total_villages']-1)*2250) - $village_points);
+                                  // Sum on the alliance troops poitns
+                                  $alliance_troops += $player_troops;
+                                ?>
                             		<tr class="<?=$data['enabled'] ? 'enable' : 'disabled'?>">
                             			<td><input type="checkbox" class="chk" name="select[]" value="<?=$player_id?>"/></td>
                             			<td>
@@ -220,7 +232,8 @@ switch ($action) {
                             			</td>
                             			<td><?=$data['name']?></td>
                             			<td><?=isset($data['alliance']) ? $data['alliance'] : '------'?></td>
-                            			<td><?=number_format($data['total_points'], 0, ',', '.')?></td>
+                                  <td><?=number_format($data['total_points'], 0, ',', '.')?></td>
+                            			<td><?=number_format($player_troops, 0, ',', '.')?></td>
                             			<td><?=number_format($data['position'], 0, ',', '.')?></td>
                             			<td><?=number_format($data['total_villages'], 0, ',', '.')?></td>
                             			<td><?=number_format($data['average_points'], 0, ',', '.')?></td>
@@ -242,11 +255,18 @@ switch ($action) {
                         <? endif; ?>
                         	<tr style="border-top: 1px solid #ccc;">
                               <td><input id="select-all" type="checkbox"/></td>
-                              <td colspan="10" style="text-align: left;">
+                              <td colspan="4" style="text-align: left;">
                                  <span>Select all</span>
                                  <input type="submit" name="disable" value="Disable"/>
                                  <input type="submit" name="enable" value="Enable"/>
                               </td>
+                              <td>
+                                <b><?= number_format($alliance_troops, 0, ',', '.') ?></b>
+                              </td>
+                              <td>
+                                <b><?= number_format($alliance_troops/count($tracks), 0, ',', '.') ?></b>
+                              </td>
+                              <td colspan="5"></td>
                            </tr>
                         </tbody>
                       </table>
