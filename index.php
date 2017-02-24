@@ -273,6 +273,9 @@ switch ($action) {
 				<li class="left">
 					<a href="<?=$config['localhost']?>scripts/autoleveler.php?start=now" class="left">Execute Autoleveler script</a>
 				</li>
+        <li class="left">
+          <a href="<?=$config['localhost']?>scripts/trades.php?start=now" class="left">Execute Trades script</a>
+        </li>
 				<li class="left">
 					<a href="<?=$config['localhost']?>scripts/scheduler.php?start=now" class="left">Execute scheduler script</a>
 				</li>
