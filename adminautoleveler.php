@@ -1,9 +1,4 @@
 <?php
-/**
- * Autoleveler administration
- *
- * @author katan
- */
 include_once 'automate.class.php';
 $autoleveler = json_decode(Automate::factory()->getAutoleveler(), TRUE);
 $buildings = json_decode(Automate::factory()->getBuildingsRules(), TRUE);
