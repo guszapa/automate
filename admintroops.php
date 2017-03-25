@@ -1,14 +1,4 @@
 <?php
-/**
- * Troops administration
- *
- * @author katan
- */
-
-/*
-* game.php?village=1957&s=build_barracks&m=recruit&a=recruit&p=d5d4
-*/
-
 include_once 'automate.class.php';
 $own_villages = Automate::factory()->getVillages('own');
 $recruit = json_decode(Automate::factory()->getRecruit(), TRUE);
