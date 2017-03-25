@@ -1,9 +1,4 @@
 <?php
-/**
- * Autoleveler administration
- *
- * @author katan
- */
 include_once 'automate.class.php';
 $config = Automate::factory()->getConfig();
 $numServers = 20;
