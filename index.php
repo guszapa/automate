@@ -1,8 +1,4 @@
 <?php
-/**
- * Farm administration
- * @author katan
- */
 include_once(dirname(__FILE__).'/automate.class.php'); // parent
 $config = Automate::factory()->getConfig();
 $logday = Automate::factory()->getLog();
