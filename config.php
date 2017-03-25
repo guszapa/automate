@@ -1,9 +1,4 @@
 <?php
-/**
- * Autoleveler administration
- *
- * @author katan
- */
 include_once(dirname(__FILE__).'/automate.class.php'); // parent
 $config = Automate::factory()->getConfig();
 $paths = Automate::factory()->getPaths();
