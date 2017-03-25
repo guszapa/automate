@@ -1,9 +1,4 @@
 <?php
-/**
- * Farm administration
- *
- * @author katan
- */
 include_once 'automate.class.php';
 $villages = Automate::factory()->getVillages();
 $config = Automate::factory()->getConfig();
