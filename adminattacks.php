@@ -1,9 +1,4 @@
 <?php
-/**
- * Farm administration
- *
- * @author katan
- */
 include_once 'automate.class.php';
 $scheduler_json = Automate::factory()->getScheduler();
 $own_villages = Automate::factory()->getVillages('own');
