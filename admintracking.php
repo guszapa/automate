@@ -1,9 +1,4 @@
 <?php
-/**
- * Autoleveler administration
- *
- * @author katan
- */
 include_once 'automate.class.php';
 $tracking = Automate::factory()->getTracking();
 $paths = Automate::factory()->getPaths();
