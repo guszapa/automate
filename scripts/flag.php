@@ -74,36 +74,10 @@ function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file
 			$bbcode .= "<br>[player]{$attack['to']['player']}[/player]<br>[img_snob] [village]{$attack['to']['x']}|{$attack['to']['y']}[/village] [b]{$_arrival}[/b]<br/><br/>Atacante: {$attack['from']['player']} [village]{$attack['from']['x']}|{$attack['from']['y']}[/village]<br/><br/>";
             $snobs_count++;
 			$alliance_email = true;
-            // *
-            // Own Auto-Defense for snobs attaks
-            // REVIEW attack flag on barraks from village attacked to take time
-            /*
-            if ((strtolower($attack['to']['player']) == strtolower($config['player'])) && $config['autodefense']) {
-            	// Check neighbor villages
-            	foreach($villages as $village_id => $village) {
-            		foreach ($village as $data) {
-            			// Discard village attacked
-            			if ($data['x'] != $attack['to']['x'] && $data['y'] != $attack['to']['y']) {
-            				// Select only village with defensive troops
-            				if (in_array('defense', $data['type'])) {
-            					// Used Heavy unit for support
-            					$hspeed = Automate::factory()->getDistance(array('x'=>$data['x'], 'y'=>$data['y']), array('x'=>$attack['to']['x'], 'y' => $attack['to']['y']), $config['troops_speed']['heavy']);
-            					if ($hspeed < $attack['unixtime']) {
-            						// Scheduler support
-            						// REVIEW attack flag on barraks from village attacked to take time
-            					}
-            				}
-            			}
-            		}
-            	}
-            }
-            */
          }
-         // Attacks to player KATAN (no snobs)
          if ((strtolower($attack['to']['player']) == strtolower($config['player'])) && !$snob) {
-         // CHANGED TO ADD katan player !!!
          //$_player = strtolower(trim($attack['to']['player']));
-         //if (($_player == 'katan' || $_player == 'baarman') && !$snob) {
+         //if (($_player == 'xxx' || $_player == 'yyy') && !$snob) {
             // Exists previous attack?
             if (count($flag_file) > 0) {
                foreach ($flag_file as $old_attack) {
