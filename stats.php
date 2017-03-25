@@ -1,9 +1,4 @@
 <?php
-/**
- * Autoleveler administration
- *
- * @author katan
- */
 include_once 'automate.class.php';
 /**
  * Controller
