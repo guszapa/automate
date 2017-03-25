@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of automate
- *
- * @author katan
- */
 define('ROOT', realpath(dirname(__FILE__)).'/');
 class Automate {
 
