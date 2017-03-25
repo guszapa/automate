@@ -1,9 +1,4 @@
 <?php
-/**
- * Farm administration
- *
- * @author katan
- */
 include_once 'automate.class.php';
 $villages_json = Automate::factory()->getVillages();
 $buildings = json_decode(Automate::factory()->getBuildingsRules(), TRUE);
