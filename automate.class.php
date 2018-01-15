@@ -204,7 +204,7 @@ class Automate {
       $speed_server = self::$_instance->_config['speed_troops'];
       $time = round(($speed_troop * sqrt(pow(($to['x']-$from['x']),2) + pow(($to['y']-$from['y']),2)))/$speed_server,2, PHP_ROUND_HALF_UP);
       $time_temp = explode(".", $time);
-      if (isset($time_temp[1])) $secs = ($time_temp[1]*60)/100;
+      if (isset($time_temp[1])) $secs = (count($time_temp[1]) > 1) ? ($time_temp[1]*60)/100 : ($time_temp[1]*60)/10;
       return (isset($time_temp[1])) ? round((($time_temp[0])*60)+$secs) : round(($time_temp[0])*60);
    }
    /** OK!
