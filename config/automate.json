@@ -47,8 +47,15 @@
     "max_building_queue": 3,
 	"autoleveler": ["construir", "ampliar"],
     "premium": 0,
-    "autodefense": 0,
-    "troops4support": 100,
+    "autodefense": {
+        "active": true,
+        "max_range": 3600,
+        "max_colonies": 3,
+        "wagons": 3,
+        "troops": {
+            "heavy": 200
+        }
+    },
     "email": {
       "host": "smtp.gmail.com",
       "port": 465,

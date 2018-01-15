@@ -18,7 +18,6 @@ if (Automate::factory()->isScheduler()) {
  */
 $config = Automate::factory()->getConfig();
 $paths = Automate::factory()->getPaths();
-$villages = Automate::factory()->getVillages('own'); // For auto-defense
 $url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php?{$config['flag']}";
 $attacks = @Automate::factory()->parser_attack($url);
 $snobs = updateFlag(Automate::factory()->getFlag());
@@ -59,7 +58,7 @@ function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file
          $from = array('x' => $attack['from']['x'], 'y' => $attack['from']['y']);
          $to = array('x' => $attack['to']['x'], 'y' => $attack['to']['y']);
          $kata_speed = (int)Automate::factory()->getDistance($from, $to, $config['troops_speed']['kata']);
-         $snob = ($attack['unixtime']-40) > $kata_speed;
+         $snob = ($attack['unixtime']) > $kata_speed;
          // Snob
          if ($snob) {
             // Exists previous attack?
@@ -113,10 +112,6 @@ function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file
    }
    // if HTML have empty, there aren't new attacks
    if ( !empty($html)) {
-
-
-
-
       // Save attacks and sendmail
       Automate::factory()->save_flagattacks($all_attacks, $snobs);
       if ($snobs_count > 0) Automate::factory()->log('F', "{$snobs_count} snobs has been detected."); // Save Log
