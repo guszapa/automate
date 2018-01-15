@@ -720,7 +720,7 @@ class Automate {
     * @param Array $attacks
     * @return void
     */
-   public function save_flagattacks(Array $attacks, Array $flag)
+   public function save_flagattacks(Array $attacks, $flag)
    {
       // One log for day
       $filename = ROOT.self::$_paths['flag_attacks'];
