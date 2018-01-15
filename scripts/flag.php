@@ -21,6 +21,7 @@ $paths = Automate::factory()->getPaths();
 $villages = Automate::factory()->getVillages('own'); // For auto-defense
 $url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php?{$config['flag']}";
 $attacks = @Automate::factory()->parser_attack($url);
+$snobs = updateFlag(Automate::factory()->getFlag());
 
 $html = $bbcode = '';
 $alliance_email = false;
@@ -38,16 +39,16 @@ echo '<pre>';
 
 // Check if parser run correctly
 if ($attacks) {
-	attackrevision($config, $html, $bbcode, $attacks, $flag_file, $attacks['pages'], $attacks['servertime'], $alliance_email);
+	attackrevision($config, $html, $bbcode, $attacks, $flag_file, $attacks['pages'], $attacks['servertime'], $alliance_email, $snobs);
 } else {
 	Automate::factory()->log('E', 'Parsing flag attacks'); // Save Error
    // Retry
    $attacks = @Automate::factory()->parser_attack($url);
-   attackrevision($config, $html, $bbcode, $attacks, $flag_file, $attacks['pages'], $attacks['servertime'], $alliance_email);
+   attackrevision($config, $html, $bbcode, $attacks, $flag_file, $attacks['pages'], $attacks['servertime'], $alliance_email, $snobs);
 }
 /** OK !!
  */
-function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file, $pages, $servertime, $alliance_email) {
+function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file, $pages, $servertime, $alliance_email, &$snobs) {
    $start = 0;
    $snobs_count = 0;
    $pages = ($pages == 0) ? 1 : $pages;
@@ -69,11 +70,16 @@ function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file
                   }
                }
             }
-			$_arrival = date('d/m/Y H:i:s', $attack['unixtime']+$servertime+$config['flag_time']);
+			   $_arrival = date('d/m/Y H:i:s', $attack['unixtime']+$servertime+$config['flag_time']);
             $html .= "<tr><td>{$attack['to']['player']} - {$attack['to']['colony']}</td><td>{$attack['from']['player']} ({$attack['from']['ally']}) - {$attack['from']['colony']}</td><td>{$_arrival}</td><td>{$attack['countdown']}</td></tr>";
-			$bbcode .= "<br>[player]{$attack['to']['player']}[/player]<br>[img_snob] [village]{$attack['to']['x']}|{$attack['to']['y']}[/village] [b]{$_arrival}[/b]<br/><br/>Atacante: {$attack['from']['player']} [village]{$attack['from']['x']}|{$attack['from']['y']}[/village]<br/><br/>";
+			   $bbcode .= "<br>[player]{$attack['to']['player']}[/player]<br>[img_snob] [village]{$attack['to']['x']}|{$attack['to']['y']}[/village] [b]{$_arrival}[/b]<br/><br/>Atacante: {$attack['from']['player']} [village]{$attack['from']['x']}|{$attack['from']['y']}[/village]<br/><br/>";
             $snobs_count++;
-			$alliance_email = true;
+
+            // Add snobs to file
+            addSnobs($snobs, $attack, $servertime, $_arrival);
+
+			   $alliance_email = true;
+
          }
          if ((strtolower($attack['to']['player']) == strtolower($config['player'])) && !$snob) {
          //$_player = strtolower(trim($attack['to']['player']));
@@ -107,8 +113,12 @@ function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file
    }
    // if HTML have empty, there aren't new attacks
    if ( !empty($html)) {
+
+
+
+
       // Save attacks and sendmail
-      Automate::factory()->save_flagattacks($all_attacks);
+      Automate::factory()->save_flagattacks($all_attacks, $snobs);
       if ($snobs_count > 0) Automate::factory()->log('F', "{$snobs_count} snobs has been detected."); // Save Log
       // Sendmail
       $html = "<html><head><style type='text/css'>.center{text-align:center;} table{border:1px solid #ccc;border-spacing:0;} th{background-color:#ccc;border-bottom:1px solid #ccc;text-shadow:1px 1px 0 #eee;} td,th{border-left:1px solid #ccc;padding: 4px 8px;}</style></head><body><table><thead><tr><th>TO</th><th>FROM</th><th>ARRIVAL</th><th class='center'>COUNTDOWN</th></tr></thead><tbody>{$html}</tbody></table><br/>{$bbcode}</body></html>";
@@ -122,6 +132,57 @@ function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file
    } else {
       echo "<br>There aren't new attacks<br>";
    }
+}
+
+function updateFlag (&$flag) {
+   $_time = time();
+   foreach($flag as $user => $users) {
+      foreach($users as $colony => $colonies) {
+         foreach($colonies as $unixtime => $attacks) {
+            if ($_time > $unixtime) {
+               unset($flag[$user][$colony][$unixtime]); // Remove old attacks
+            }
+         }
+         // Remove colony if is empty
+         if (count($flag[$user][$colony]) == 0) {
+            unset($flag[$user][$colony]);
+         }
+      }
+      // Remove user if is empty
+      if (count($flag[$user]) == 0) {
+         unset($flag[$user]);
+      }
+   }
+}
+
+function addSnobs (&$snobs, &$attack, &$servertime, &$arrival) {
+   if (!isset($snobs[$attack['to']['player']])) {
+      // Create player array if not exists
+      $snobs[$attack['to']['player']] = array();
+   }
+   if (isset($snobs[$attack['to']['player']])) {
+      $_village = $attack['to']['colony'];
+      // Create village array if not exists
+      if (!isset($snobs[$attack['to']['player']][$_village])) {
+         $snobs[$attack['to']['player']][$_village] = array();
+      }
+      if (isset($snobs[$attack['to']['player']][$_village])) {
+         $_unixtime = $attack['unixtime'] + $servertime;
+         if (!isset($snobs[$attack['to']['player']][$_village][$_unixtime])) {
+            $snobs[$attack['to']['player']][$_village][$_unixtime] = array();
+            $snobs[$attack['to']['player']][$_village][$_unixtime]['quantity'] = 1;
+            $snobs[$attack['to']['player']][$_village][$_unixtime]['arrival'] = $arrival;
+            $snobs[$attack['to']['player']][$_village][$_unixtime]['coords'] = array();
+            $snobs[$attack['to']['player']][$_village][$_unixtime]['coords']['x'] = $attack['to']['x'];
+            $snobs[$attack['to']['player']][$_village][$_unixtime]['coords']['y'] = $attack['to']['y'];
+         } else {
+            $snobs[$attack['to']['player']][$_village][$_unixtime]['quantity']++;
+         }
+      }
+   }
+   // echo "<pre>";
+   // print_r($snobs);
+   // echo "</pre>";
 }
 
 /** OK

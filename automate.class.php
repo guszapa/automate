@@ -9,6 +9,7 @@ class Automate {
        'farms' => 'json/farms.json',
        'villages' => 'json/villages.json',
        'flag_attacks' => 'json/flag_attacks.json',
+       'flag' => 'json/flag.json',
        'farm_attacks' => 'json/farm_attacks.json',
        'autoleveler' => 'json/autoleveler.json',
        'scheduler' => 'json/scheduler.json',
@@ -184,6 +185,10 @@ class Automate {
    public function getProof() {
       $filename = ROOT.self::$_paths['proof'];
       return is_file($filename) ? file_get_contents($filename) : FALSE;
+   }
+   public function getFlag() {
+      $filename = ROOT.self::$_paths['flag'];
+      return (is_file($filename)) ? json_decode(file_get_contents($filename), TRUE) : FALSE;
    }
 
    /** OK!
@@ -715,14 +720,17 @@ class Automate {
     * @param Array $attacks
     * @return void
     */
-   public function save_flagattacks(Array $attacks)
+   public function save_flagattacks(Array $attacks, Array $flag)
    {
-       // One log for day
+      // One log for day
       $filename = ROOT.self::$_paths['flag_attacks'];
+      $flagfile = ROOT.self::$_paths['flag']; // File to save snobs to use autodefense
+
       if ( !is_dir(ROOT.self::$_paths['path'])) {
           mkdir(ROOT.self::$_paths['path']);
       }
       if (is_writable($filename)) {
+          // json attacks
           $json = array();
           $f = fopen($filename, 'w');
          foreach($attacks as $attack) {
@@ -730,6 +738,14 @@ class Automate {
          }
          fwrite($f, json_encode($json));
          fclose($f);
+
+         // write flag
+         if (isset($flag) && is_writable($flagfile)) {
+            $f = fopen($flagfile, 'w');
+           fwrite($f, json_encode($flag));
+           fclose($f);
+         }
+
       } else {
           echo "<h1>Warning! You don't have permission to write a json file.</h1><h3>Review your permissions</h3>";
          exit();
