@@ -101,10 +101,8 @@ function reduceTroops (&$villages, $village_id, $troops) {
 	}
 }
 
-// TODO
 // Update snobs vs flag/snobs from the flag account
-// $snobs = updateSnob ($snob_origin, $snobs);
-// 
+$snobs = updateSnob ($snob_origin, $snobs);
 
 // Auto-defense is active
 if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
