@@ -202,9 +202,15 @@ class Automate {
    public function getDistance(Array $from, Array $to, $speed_troop)
    {
       $speed_server = self::$_instance->_config['speed_troops'];
-      $time = round(($speed_troop * sqrt(pow(($to['x']-$from['x']),2) + pow(($to['y']-$from['y']),2)))/$speed_server,2, PHP_ROUND_HALF_UP);
+      $time = ($speed_troop * sqrt(pow(($to['x']-$from['x']),2) + pow(($to['y']-$from['y']),2)))/$speed_server;
       $time_temp = explode(".", $time);
-      if (isset($time_temp[1])) $secs = (strlen($time_temp[1]) > 1) ? floor(($time_temp[1]*60)/100) : floor(($time_temp[1]*60)/10);
+      if (isset($time_temp[1])) {
+        $time_temp[1] = "{$time_temp[1][0]}{$time_temp[1][1]}";
+        if ($time_temp[1][1] == 9) $time_temp[1] = $time_temp[1]+1;
+        $time_temp[1] = round($time_temp[1]/10, 1, PHP_ROUND_HALF_UP)*10;
+        $time_temp[1] = (int)$time_temp[1];
+      }
+      if (isset($time_temp[1])) $secs = ($time_temp[1] > 9) ? ($time_temp[1]*/60)/100 : $time_temp[1];
       return (isset($time_temp[1])) ? round((($time_temp[0])*60)+$secs) : round(($time_temp[0])*60);
    }
    /** OK!
