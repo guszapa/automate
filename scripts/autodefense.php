@@ -23,18 +23,53 @@ $defense = Array();
 
 // update snob
 function updateSnob (&$snob_origin, &$snobs) {
-	// Remove old attacks
-	// if ($_time > $unixtime) {
- //       unset($flag[$user][$colony][$unixtime]); // Remove old attacks
- //    }
-
-	foreach($snob_origin as $user => $users) {
+	$_time = time();
+	// Remove old attacks previously
+	foreach($snobs as $user => $users) {
 		foreach($users as $colony => $colonies) {
 			foreach($colonies as $unixtime => $attack) {
-				// Check if exist 
-				// 
-				// TODO
-				// 
+				if ($_time >= $unixtime) {
+					unset($snobs[$user][$colony][$unixtime]);
+				}
+			}
+		}
+	}
+	// Add new snobs on ally flag
+	foreach($snob_origin as $user_origin => $users_origin) {
+		foreach($users_origin as $colony_origin => $colonies_origin) {
+			foreach($colonies_origin as $unixtime_origin => $attack_origin) {
+				$match = false;
+				// Check if exist on the own snob/flag json file
+				foreach($snobs as $user => $users) {
+					foreach($users as $colony => $colonies) {
+						foreach($colonies as $unixtime => $attack) {
+							// if has the same unixtame and has previous support, mark as match
+							if ($unixtime == $unixtime_origin && isset($attack['support'])) {
+								$match = true;
+							}
+						}
+					}
+				}
+
+				// save attack if not matches
+				if (!$match) {
+					// if not exists user add all users data
+					if (!isset($snobs[$user_origin])) {
+						$snobs[$user_origin] = $users_origin;
+					}
+					// if not exists colony add all colonies data
+					if (!isset($snobs[$user_origin][$colony_origin])) {
+						$snobs[$user_origin][$colony_origin] = $colonies_origin;
+					}
+					// if not exists the same attack all attack sata
+					if (!isset($snobs[$user_origin][$colony_origin][$unixtime_origin])) {
+						$snobs[$user_origin][$colony_origin][$unixtime_origin] = $attack_origin;
+					}
+					// if exists increase one more snob
+					else {
+						$snobs[$user_origin][$colony_origin][$unixtime_origin]["quantity"] = $attack_origin["quantity"]+1;
+					}
+				}
 			}
 		}
 	}
