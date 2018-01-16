@@ -48,10 +48,12 @@
 	"autoleveler": ["construir", "ampliar"],
     "premium": 0,
     "autodefense": {
+        "flag_file": "http://0.0.0.0/automate/json/flag.json",
         "active": true,
         "max_range": 3600,
         "max_colonies": 3,
         "wagons": 3,
+        "miliseconds": 2000,
         "troops": {
             "heavy": 200
         }

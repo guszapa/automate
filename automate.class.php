@@ -205,12 +205,12 @@ class Automate {
       $time = ($speed_troop * sqrt(pow(($to['x']-$from['x']),2) + pow(($to['y']-$from['y']),2)))/$speed_server;
       $time_temp = explode(".", $time);
       if (isset($time_temp[1])) {
-        $time_temp[1] = "{$time_temp[1][0]}{$time_temp[1][1]}";
+        $time_temp[1] = (isset($time_temp[1][1])) ? "{$time_temp[1][0]}{$time_temp[1][1]}" : "{$time_temp[1][0]}0";
         if ($time_temp[1][1] == 9) $time_temp[1] = $time_temp[1]+1;
         $time_temp[1] = round($time_temp[1]/10, 1, PHP_ROUND_HALF_UP)*10;
         $time_temp[1] = (int)$time_temp[1];
       }
-      if (isset($time_temp[1])) $secs = ($time_temp[1] > 9) ? ($time_temp[1]*/60)/100 : $time_temp[1];
+      if (isset($time_temp[1])) $secs = ($time_temp[1] > 9) ? ($time_temp[1]*60)/100 : $time_temp[1];
       return (isset($time_temp[1])) ? round((($time_temp[0])*60)+$secs) : round(($time_temp[0])*60);
    }
    /** OK!
@@ -1145,6 +1145,18 @@ class Automate {
 
    public function register ($url) {
     return $this->_cURL($url);
+   }
+
+   public function getFlagSnobJson ($url) {
+    $opts = array (
+      'http' => array (
+          'method' => 'GET',
+          'header'=> "Content-type: application/json"
+          )
+      );
+    $context = stream_context_create($opts); 
+    $snobs_json = file_get_contents($url, false, $context);
+    return json_decode($snobs_json, true);
    }
 
    /**
