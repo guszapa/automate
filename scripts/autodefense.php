@@ -188,20 +188,6 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 			}
 		}
 
-		// Update flag json file with the user support
-		// OK
-		if (count($defense) > 0) {
-			if ($f = fopen("../".$paths['flag'], 'w')) {
-				fwrite($f, json_encode($snobs));
-				fclose($f);
-				Automate::factory()->log('F', "Add user support to flag json file");
-				echo "<b>Add user support to flag json file</b><br>";
-			} else {
-				Automate::factory()->log('E', "You don't have permission to write {$paths['flag']} file");
-				echo "<b>You don't have permission to write {$paths['flag']} file</b><br>";
-			}
-		}
-
 		// Update village json file with the current troops
 		// OK
 		if (count($defense) > 0) {
@@ -215,6 +201,18 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 				echo "<b>You don't have permission to write {$paths['villages']} file</b><br>";
 			}
 		}
+	}
+
+	// Update flag json file with the user support
+	// OK
+	if ($f = fopen("../".$paths['flag'], 'w')) {
+		fwrite($f, json_encode($snobs));
+		fclose($f);
+		Automate::factory()->log('F', "Update own flag json file");
+		echo "<b>Update own flag json file</b><br>";
+	} else {
+		Automate::factory()->log('E', "You don't have permission to write {$paths['flag']} file");
+		echo "<b>You don't have permission to write {$paths['flag']} file</b><br>";
 	}
 }
 ?>
