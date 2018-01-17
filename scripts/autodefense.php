@@ -5,7 +5,7 @@ include_once(dirname(dirname(__FILE__)).'/automate.class.php'); // parent
 
 // Simulate human iteraction
 if (!isset($_GET['start'])) {
-	sleep(rand(30,70));
+	sleep(rand(1,10));
 }
 // Check if scheduler is running
 if (Automate::factory()->isScheduler()) {
@@ -102,7 +102,7 @@ function reduceTroops (&$villages, $village_id, $troops) {
 }
 
 // Update snobs vs flag/snobs from the flag account
-$snobs = updateSnob ($snob_origin, $snobs);
+updateSnob ($snob_origin, $snobs);
 
 // Auto-defense is active
 if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
@@ -175,9 +175,14 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 		// Save auto-defense to scheduler json file
 		// OK
 		if (count($defense) > 0) {
-			$to_save = array_merge($scheduler_json, $defense);
+			if (is_array($scheduler_json)) {
+				$to_save = array_merge($scheduler_json, $defense);
+			} else {
+				$to_save = $defense;
+			}
+
 			ksort($to_save, SORT_NUMERIC); //order by departure time ASC
-			if ($f = fopen("../".$paths['scheduler'], 'w')) {
+			if ($f = fopen(dirname(dirname(__FILE__))."/{$paths['scheduler']}", 'w')) {
 				fwrite($f, json_encode($to_save));
 				fclose($f);
 				Automate::factory()->log('F', "Scheduler auto-defense to detected snoobs");
@@ -191,7 +196,7 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 		// Update village json file with the current troops
 		// OK
 		if (count($defense) > 0) {
-			if ($f = fopen("../".$paths['villages'], 'w')) {
+			if ($f = fopen(dirname(dirname(__FILE__))."/{$paths['villages']}", 'w')) {
 				fwrite($f, json_encode($villages));
 				fclose($f);
 				Automate::factory()->log('F', "Update villages troops json file");
@@ -205,7 +210,7 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 
 	// Update flag json file with the user support
 	// OK
-	if ($f = fopen("../".$paths['flag'], 'w')) {
+	if ($f = fopen(dirname(dirname(__FILE__))."/{$paths['flag']}", 'w')) {
 		fwrite($f, json_encode($snobs));
 		fclose($f);
 		Automate::factory()->log('F', "Update own flag json file");
