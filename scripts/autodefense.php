@@ -113,6 +113,8 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 					// Check own previous support
 					if (isset($attack['support']) && in_array($config['player'], $attack['support'])) {
 						echo "Exists previous support to {$colony} at {$attack['arrival']}<br/>";
+					} else if (isset($attack['transfer']) && $attack['transfer']) {
+						echo "Transfer colony between same alliance<br/>"
 					} else {
 						// Check colonies and distance
 						$count_colonies = 0;
