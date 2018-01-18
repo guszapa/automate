@@ -15,6 +15,7 @@ if (Automate::factory()->isScheduler()) {
 
 $config = Automate::factory()->getConfig();
 $paths = Automate::factory()->getPaths();
+$all_villages = Automate::factory()->getVillages(); // For auto-defense
 $villages = Automate::factory()->getVillages('own'); // For auto-defense
 $scheduler_json = Automate::factory()->getScheduler();
 $snob_origin = Automate::factory()->getFlagSnobJson($config['autodefense']['flag_file']);
@@ -114,7 +115,7 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 					if (isset($attack['support']) && in_array($config['player'], $attack['support'])) {
 						echo "Exists previous support to {$colony} at {$attack['arrival']}<br/>";
 					} else if (isset($attack['transfer']) && $attack['transfer']) {
-						echo "Transfer colony between same alliance<br/>"
+						echo "Transfer colony between same alliance<br/>";
 					} else {
 						// Check colonies and distance
 						$count_colonies = 0;
@@ -133,32 +134,37 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 								if ($distance <= $config['autodefense']['max_range'] && $count_colonies < $config['autodefense']['max_colonies']) {
 									// get departure time to send defense
 									$start = $unixtime - $distance;
-									$mileseconds = ($count_colonies) * $config['autodefense']['miliseconds'];
-									// Add miliseconds
-									$start = "{$start}.{$mileseconds}";
 
-									// Create defense to scheduler
-									$defense[$start] = Array();
-									$_support = Array();
-									$_support["from"] = $from;
-									$_support["from"]["id"] = $village_id;
-									$_support["to"] = $attack['coords'];
-									$_support["to"]["id"] = "";
-									$_support["iteration"] = 0;
-									$_support["method"] = "support";
-									$_support["datetime"] =  date('m/d/Y H:i:s', $unixtime);
-									$_support["departure"] =  date('m/d/Y H:i:s', $start);
-									$_support["kata_target"] = "";
-									$_support["troops"] = $config['autodefense']['troops'];
-									
-									array_push($defense[$start], $_support);
-									// Add own support
-									if (!isset($snobs[$user][$colony][$unixtime]["support"])) {
-										$snobs[$user][$colony][$unixtime]["support"] = Array();
+									// Wagons
+									for($i=0; $i < $config['autodefense']['wagons']; $i++) {
+										$mileseconds = $i * $config['autodefense']['miliseconds'];
+										// Add miliseconds
+										$_start_temp = explode(".", $start);
+										$start = "{$_start_temp[0]}.{$mileseconds}";
+
+										// Create defense to scheduler
+										$defense[$start] = Array();
+										$_support = Array();
+										$_support["from"] = $from;
+										$_support["from"]["id"] = $village_id;
+										$_support["to"] = $attack['coords'];
+										$_support["to"]["id"] = "";
+										$_support["iteration"] = 0;
+										$_support["method"] = "support";
+										$_support["datetime"] =  date('m/d/Y H:i:s', $unixtime);
+										$_support["departure"] =  date('m/d/Y H:i:s', $start);
+										$_support["kata_target"] = "";
+										$_support["troops"] = $config['autodefense']['troops'];
+										
+										array_push($defense[$start], $_support);
+										// Add own support
+										if (!isset($snobs[$user][$colony][$unixtime]["support"])) {
+											$snobs[$user][$colony][$unixtime]["support"] = Array();
+										}
+										array_push($snobs[$user][$colony][$unixtime]["support"], $config['player']);
+										// reduce troops for next iteration
+										reduceTroops($villages, $village_id, $config['autodefense']['troops']);
 									}
-									array_push($snobs[$user][$colony][$unixtime]["support"], $config['player']);
-									// reduce troops for next iteration
-									reduceTroops($villages, $village_id, $config['autodefense']['troops']);
 									$count_colonies ++;
 								}
 							} else {
@@ -199,7 +205,8 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 		// OK
 		if (count($defense) > 0) {
 			if ($f = fopen(dirname(dirname(__FILE__))."/{$paths['villages']}", 'w')) {
-				fwrite($f, json_encode($villages));
+				$all_villages['own'] = $villages;
+				fwrite($f, json_encode($all_villages));
 				fclose($f);
 				Automate::factory()->log('F', "Update villages troops json file");
 				echo "<b>Update villages troops json file</b><br>";
