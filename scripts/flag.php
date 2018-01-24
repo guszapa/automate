@@ -20,7 +20,9 @@ $config = Automate::factory()->getConfig();
 $paths = Automate::factory()->getPaths();
 $url = "{$config['protocol']}://{$config['server']}.{$config['domain']}/game.php?{$config['flag']}";
 $attacks = @Automate::factory()->parser_attack($url);
-$snobs = updateFlag(Automate::factory()->getFlag());
+$snobs = Automate::factory()->getFlag();
+if (!isset($snobs) || !is_array($snobs)) $snobs = Array();
+updateFlag($snobs);
 
 $html = $bbcode = '';
 $alliance_email = false;
@@ -131,21 +133,23 @@ function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file
 
 function updateFlag (&$flag) {
    $_time = time();
-   foreach($flag as $user => $users) {
-      foreach($users as $colony => $colonies) {
-         foreach($colonies as $unixtime => $attacks) {
-            if ($_time > $unixtime) {
-               unset($flag[$user][$colony][$unixtime]); // Remove old attacks
+   if (isset($flag) && is_array($flag)) {
+      foreach($flag as $user => $users) {
+         foreach($users as $colony => $colonies) {
+            foreach($colonies as $unixtime => $attacks) {
+               if ($_time > $unixtime) {
+                  unset($flag[$user][$colony][$unixtime]); // Remove old attacks
+               }
+            }
+            // Remove colony if is empty
+            if (count($flag[$user][$colony]) == 0) {
+               unset($flag[$user][$colony]);
             }
          }
-         // Remove colony if is empty
-         if (count($flag[$user][$colony]) == 0) {
-            unset($flag[$user][$colony]);
+         // Remove user if is empty
+         if (count($flag[$user]) == 0) {
+            unset($flag[$user]);
          }
-      }
-      // Remove user if is empty
-      if (count($flag[$user]) == 0) {
-         unset($flag[$user]);
       }
    }
 }
@@ -166,6 +170,10 @@ function addSnobs (&$snobs, &$attack, &$servertime, &$arrival) {
          if (!isset($snobs[$attack['to']['player']][$_village][$_unixtime])) {
             $snobs[$attack['to']['player']][$_village][$_unixtime] = array();
             $snobs[$attack['to']['player']][$_village][$_unixtime]['quantity'] = 1;
+            // transfer colony on the same alliance
+            if (isset($config['ally_short_name'])) {
+               $snobs[$attack['to']['player']][$_village][$_unixtime]['transfer'] = strtolower($config['ally_short_name']) == strtolower($attack['from']['ally']);
+            }
             $snobs[$attack['to']['player']][$_village][$_unixtime]['arrival'] = $arrival;
             $snobs[$attack['to']['player']][$_village][$_unixtime]['coords'] = array();
             $snobs[$attack['to']['player']][$_village][$_unixtime]['coords']['x'] = $attack['to']['x'];
@@ -175,9 +183,6 @@ function addSnobs (&$snobs, &$attack, &$servertime, &$arrival) {
          }
       }
    }
-   // echo "<pre>";
-   // print_r($snobs);
-   // echo "</pre>";
 }
 
 /** OK

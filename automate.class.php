@@ -750,6 +750,9 @@ class Automate {
             $f = fopen($flagfile, 'w');
            fwrite($f, json_encode($flag));
            fclose($f);
+         } else {
+          echo "<h1>Warning! You don't have permission to write flag json file.</h1><h3>Review your permissions</h3>";
+          exit();
          }
 
       } else {

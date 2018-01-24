@@ -189,13 +189,11 @@ switch ($action) {
 		<h1><?=$config['player']?> <em style="font-size:0.6em">(<?=date('d/m/Y H:i:s')?> | <?=date_default_timezone_get();?>)</em></h1>
 	  </div>
 			<ul class="dashboard block">
-				<!--
 				<li class="left">
 					<a href="<?=$config['localhost']?>config.php" class="left">
 						<img src="<?=$config['localhost']?>media/img/settings.png"/><br/>Settings
 					</a>
 				</li>
-				-->
 				<li class="left">
 					<a href="<?=$config['localhost']?>adminvillages.php?mode=attack" class="left">
 						<img src="<?=$config['localhost']?>media/img/menu_village.png"/><br/>
