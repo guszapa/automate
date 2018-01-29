@@ -77,7 +77,7 @@ function attackrevision(&$config, &$html, &$bbcode, Array &$attacks, &$flag_file
             $snobs_count++;
 
             // Add snobs to file
-            addSnobs($snobs, $attack, $servertime, $_arrival);
+            addSnobs($snobs, $attack, $servertime, $_arrival, $config);
 
 			   $alliance_email = true;
 
@@ -154,7 +154,7 @@ function updateFlag (&$flag) {
    }
 }
 
-function addSnobs (&$snobs, &$attack, &$servertime, &$arrival) {
+function addSnobs (&$snobs, &$attack, &$servertime, &$arrival, &$config) {
    if (!isset($snobs[$attack['to']['player']])) {
       // Create player array if not exists
       $snobs[$attack['to']['player']] = array();
