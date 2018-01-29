@@ -222,7 +222,6 @@ if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
 	if ($f = fopen(dirname(dirname(__FILE__))."/{$paths['flag']}", 'w')) {
 		fwrite($f, json_encode($snobs));
 		fclose($f);
-		Automate::factory()->log('F', "Update own flag json file");
 		echo "<b>Update own flag json file</b><br>";
 	} else {
 		Automate::factory()->log('E', "You don't have permission to write {$paths['flag']} file");

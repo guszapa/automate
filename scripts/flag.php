@@ -172,7 +172,10 @@ function addSnobs (&$snobs, &$attack, &$servertime, &$arrival) {
             $snobs[$attack['to']['player']][$_village][$_unixtime]['quantity'] = 1;
             // transfer colony on the same alliance
             if (isset($config['ally_short_name'])) {
-               $snobs[$attack['to']['player']][$_village][$_unixtime]['transfer'] = strtolower($config['ally_short_name']) == strtolower($attack['from']['ally']);
+               $findOwnAlly = strpos(strtolower($attack['from']['ally']), strtolower($config['ally_short_name']));
+               if ($findOwnAlly !== false) {
+                  $snobs[$attack['to']['player']][$_village][$_unixtime]['transfer'] = true;
+               }
             }
             $snobs[$attack['to']['player']][$_village][$_unixtime]['arrival'] = $arrival;
             $snobs[$attack['to']['player']][$_village][$_unixtime]['coords'] = array();
