@@ -106,7 +106,7 @@ function reduceTroops (&$villages, $village_id, $troops) {
 updateSnob ($snob_origin, $snobs);
 
 // Auto-defense is active
-if (isset($config['autodefense']) && isset($config['autodefense']['active'])) {
+if (isset($config['autodefense']) && isset($config['autodefense']['active']) && $config['autodefense']['active']) {
 	if (count($snobs) > 0) {
 		foreach($snobs as $user => $users) {
 			foreach($users as $colony => $colonies) {
