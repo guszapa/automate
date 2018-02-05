@@ -279,6 +279,9 @@ switch ($action) {
 				<li class="left">
 					<a href="<?=$config['localhost']?>scripts/tracking.php?start=now" class="left">Execute tracking script</a>
 				</li>
+        <li class="left">
+          <a href="<?=$config['localhost']?>scripts/removeSchedulerFlag.php?start=now" class="left">Remove scheduler flag</a>
+        </li>
 				<li class="left">
 					<a href="<?=$config['localhost']?>" class="left">Refresh page</a>
 				</li>
